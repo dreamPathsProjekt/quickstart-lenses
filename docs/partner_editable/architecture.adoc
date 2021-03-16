@@ -1,27 +1,17 @@
-Deploying this Quick Start for a new virtual private cloud (VPC) with
-default parameters builds the following {partner-product-short-name} environment in the
-AWS Cloud.
+:xrefstyle: short
 
-// Replace this example diagram with your own. Send us your source PowerPoint file. Be sure to follow our guidelines here : http://(we should include these points on our contributors giude)
+<<architecture1>> shows all the components the Quick Start may deploy. Resources are created according to the deployment when launching the AWS CloudFormation template.
+
 :xrefstyle: short
 [#architecture1]
-.Quick Start architecture for {partner-product-short-name} on AWS
-image::../images/architecture_diagram.png[Architecture,width=100%,height=100%]
+.Quick Start architecture for Lenses.io on AWS with Managed Streaming Kafka in public or private subnet
+[link=images/architecture_diagram.png]
+image::../images/architecture_diagram.png[Architecture1,width=80%,height=80%]
 
-As shown in <<architecture1>>, the Quick Start sets up the following:
+As shown in <<architecture1>>, this deployment sets up the following, which constitutes the Lenses.io workspace in your AWS account:
 
-* A highly available architecture that spans two Availability Zones.*
-* A VPC configured with public and private subnets, according to AWS
-best practices, to provide you with your own virtual network on AWS.*
-* In the public subnets:
-** Managed network address translation (NAT) gateways to allow outbound
-internet access for resources in the private subnets.*
-** A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to EC2 instances in public and private subnets.*
-* In the private subnets:
-** <item>.
-** <item>.
-// Add bullet points for any additional components that are included in the deployment. Make sure that the additional components are also represented in the architecture diagram. End each bullet with a period.
-* <describe any additional components>.
-
-[.small]#*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
+* An EC2 Instance with your selected choise about the instance type
+* A security group to access the Lenses.io Workspace and setup the rule for communicating
+with Amazon MSK
+* A Cloudwatch logs group where you can see the logs of Lenses.io workspace
+* An EBS storage where we store the data if you use the local storage option (default) in the CloudFormation template
