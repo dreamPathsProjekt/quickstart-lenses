@@ -1,23 +1,25 @@
 // Add steps as necessary for accessing the software, post-configuration, and testing. Don’t include full usage instructions for your software, but add links to your product documentation for that information.
 //Should any sections not be applicable, remove them
 
-== Test the deployment
-// If steps are required to test the deployment, add them here. If not, remove the heading
-
 == Post-deployment steps
-// If post-deployment steps are required, add them here. If not, remove the heading
 
-== Best practices for using {partner-product-short-name} on AWS
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
+. Copy the URL of the Lenses.io workspace in CloudFormation Outputs as <<outputs1>> and <<outputs2>> shows.
+. Use the instance ID as the password to login in Lenses.io workspace. Specifically *admin/<ec2-instance-id>*
 
-_Add any best practices for using the software._
+:xrefstyle: short
+[#outputs1]
+.Lenses.io Workspace URL
+[link=images/cfn_outputs.png]
+image::../images/cfn_outputs.png[output,width=80%,height=80%]
+
+:xrefstyle: short
+[#outputs2]
+.Lenses.io Password
+[link=images/instance-name.png]
+image::../images/instance-name.png[EC2InstanceIDLensesPassword,width=80%,height=80%]
 
 == Security
 // Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
 
-_Add any security-related information._
-
-== Other useful information
-//Provide any other information of interest to users, especially focusing on areas where AWS or cloud usage differs from on-premises usage.
-
-_Add any other details that will help the customer use the software on AWS._
+The EC2 instance doesn't use SSH key pairs but it support EC2 Instance Connect as it is a secure way to use AWS Identity and Access Management (IAM) policies and principals to control SSH access  to your instances, removing the need to share and manage SSH keys. 
+You can find more details here https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html
