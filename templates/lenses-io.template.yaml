@@ -1,0 +1,619 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploy Lenses on AWS EC2 instance.
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: Network Configuration
+        Parameters:
+          - VPC
+          - SubnetId
+      - Label:
+          default: Lenses Network
+        Parameters:
+          - SSHLocation
+          - LensesLocation
+      - Label:
+          default: Lenses (Required)
+        Parameters:
+
+          - InstanceType
+      - Label:
+          default: AWS MSK  (Required)
+        Parameters: 
+          - MSKClusterARN
+          - MSKSecurityGroup
+      - Label:
+          default: AWS MSK SASl/SCRAM  (Optional)
+        Parameters: 
+          - MSKSecretName
+          - MSKSecretDecryptionKMSKey
+      - Label:
+          default: Services (Optional)
+        Parameters:
+          - SchemaRegistryURLs
+          - ConnectURLs
+      - Label:
+          default: Monitoring
+        Parameters:
+          - CloudWatchMetrics
+      - Label:
+          default: Lenses Storage
+        Parameters:
+          - LensesStorage
+          - StoragePostgresHostname
+          - StoragePostgresUsername
+          - StoragePostgresPassword
+          - StoragePostgresDatabase
+
+    ParameterLabels:
+
+      MSKClusterARN:
+        default: Cluster ARN
+      MSKSecurityGroup:
+        default: Cluster Security Group
+      MSKSecretName:
+        default: MSK Associated MSKSecretNameSecret
+      MSKSecretDecryptionKMSKey:
+        defaukt: KMS SymetricKey Name
+      SchemaRegistryURLs:
+        default: Schema Registry JSON (optional)
+      ConnectURLs:
+        default: Connect JSON (optional)
+      SubnetId:
+        default: Subnet ID of VPC   
+      CloudWatchMetrics:
+        default: Cloudwatch Metrics
+      LensesStorage:
+        default: Lenses storage Type
+      StoragePostgresHostname:
+        default: PostgresHostname
+      StoragePostgresUsername:
+        default: PostgresUsername
+      StoragePostgresPassword:
+        default: PostgresPassword
+      StoragePostgresDatabase:
+        default: PostgresDatabase
+
+Parameters:
+
+  SSHLocation:
+    Description: >-
+      set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0 
+      to allow all IP addresses access, or another CIDR range.
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+
+  LensesLocation:
+    Description: >-
+      set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0 to 
+      allow all IP addresses access, or another CIDR range.
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+
+  VPC:
+    Description: The VPC that the ECS cluster is deployed to
+    Type: AWS::EC2::VPC::Id
+  
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: SubnetId of an existing subnet (for the primary network) in your
+      Virtual Private Cloud (VPC)
+    ConstraintDescription: must be an existing subnet in the selected Virtual Private
+      Cloud.
+  
+  InstanceType:
+    Type: String
+    Default: t2.large
+    AllowedValues:
+    - t2.large
+    - t2.xlarge
+    - t3.medium
+    - t3.large
+    - t3.xlarge
+    - m4.large
+    - m4.xlarge
+    - m4.2xlarge
+    - m4.4xlarge
+    - m4.10xlarge
+    - m4.16xlarge
+    - m5.large
+    - m5.xlarge
+    - m5.2xlarge
+    - m5.4xlarge
+    - c4.large
+    - c4.xlarge
+    - c4.2xlarge
+    - c4.4xlarge
+    - c4.8xlarge
+    - c5.large
+    - c5.xlarge
+    - c5.2xlarge
+    - c5.4xlarge
+    - c5.9xlarge
+    - r4.large
+    - r4.xlarge
+    - r4.2xlarge
+    - r4.4xlarge
+    - r4.8xlarge
+    - r4.16xlarge
+    Description: Lenses EC2 instance type
+
+
+
+  LensesStorage:
+    Type: String
+    Default: local
+    AllowedValues:
+    - local
+    - postgres
+    Description: Storage Mode
+
+  StoragePostgresHostname:
+    Type: String
+    Description: (Required if storage is postgres) Postgres Hostname
+
+  StoragePostgresUsername:
+    Type: String
+    Description: (Required if storage is postgres) Postgres Username
+
+  StoragePostgresPassword:
+    Type: String
+    Description: (Required if storage is postgres) Postgres Password
+    NoEcho: "true"
+
+  StoragePostgresDatabase:
+    Type: String
+    Description: (Required if storage is postgres) Postgres Database Name
+
+  MSKClusterARN:
+    Type: String
+    Description: >-
+      MSK Cluster ARN
+
+  MSKSecurityGroup:
+    Type: String
+    Description: >-
+      MSK Cluster Security Group ID
+
+  MSKSecretName:
+    Type: String
+    Description: SASL Scram Secret Name
+
+  MSKSecretDecryptionKMSKey:
+    Type: String
+    Description: The KMS Symetric key that will be used to decrypt the secret
+
+  SchemaRegistryURLs:
+    Type: String
+    Description: >-
+      Schema Registry Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#schema-registry
+
+  ConnectURLs:
+    Type: String
+    Description: >-
+      Connect Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect
+
+  CloudWatchMetrics:
+    Type: String
+    Description: >-
+      Send all consumer metrics of lenses_endpoint/metrics to cloudwatch
+    Default: "No"
+    AllowedValues:
+      - "Yes"
+      - "No"
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      linux: ami-0403543e50e43793a
+    us-east-2:
+      linux: ami-08e219e43bc502931
+    us-west-1:
+      linux: ami-00d9f8458f9897d38
+    us-west-2:
+      linux: ami-089b34a34135ef556
+    ca-central-1:
+      linux: ami-01b0cd0cffd09c748
+    eu-central-1:
+      linux: ami-08b65a18eefdacd99
+    eu-west-1:
+      linux: ami-02b6002fcb110ec6c
+    eu-west-2:
+      linux: ami-00d612bfefeea2390
+    eu-west-3:
+      linux: ami-0d5f0cea12b3305b7
+    ap-southeast-1:
+      linux: ami-00b195322a19c62a0
+    ap-southeast-2:
+      linux: ami-009fe482cc9ac7415
+    ap-south-1:
+      linux: ami-056c2a7e3c769556c
+    ap-northeast-1:
+      linux: ami-096fd32bd9755f011
+    ap-northeast-2:
+      linux: ami-08664014e7483e8d9
+    sa-east-1:
+      linux: ami-0dc3bbe1ad732ec51
+
+Resources:
+  Lenses:
+    Type: AWS::EC2::Instance
+    Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/sdf
+          Ebs:
+            DeleteOnTermination: false
+            VolumeSize: 20
+      ImageId:
+        Fn::FindInMap:
+          - RegionMap
+          - Ref: AWS::Region
+          - linux
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref IAMProfile
+      SecurityGroupIds:
+        - !GetAtt "LensesSecurityGroup.GroupId"
+      SubnetId: !Ref SubnetId
+      Tags: 
+        - Key: "Name"
+          Value: !Ref AWS::StackName
+      UserData:
+        Fn::Base64: !Join
+          - ''
+          - - !Sub |
+              #!/bin/bash
+              set -o errexit
+
+              cd /opt
+
+              MSK_CLUSTER_ARN="${MSKClusterARN}"
+              MSK_SECRET_NAME="${MSKSecretName}"
+              AWS_REGION="${AWS::Region}"
+              LENSES_STORAGE_TYPE="${LensesStorage}"
+              LENSES_STORAGE_POSTGRES_HOSTNAME="${StoragePostgresHostname}"
+              LENSES_STORAGE_POSTGRES_USERNAME="${StoragePostgresUsername}"
+              LENSES_STORAGE_POSTGRES_PASSWORD="${StoragePostgresPassword}"
+              LENSES_STORAGE_POSTGRES_DATABASE="${StoragePostgresDatabase}"
+              CloudWatchCustomMetrics="${CloudWatchMetrics}"
+              CLOUDWATCH_LOG_GROUP="${CloudWatchLogsGroup}"
+              SCHEMA_REGISTRY_URLS='${SchemaRegistryURLs}'
+              CONNECT_URLS='${ConnectURLs}'
+              CLUSTER_PROTOCOL="PLAINTEXT"
+              CONN_PROTOCOL="PLAINTEXT"
+              JSON_CLUSTER_TRANSIT=".BootstrapBrokerString"
+              KEY_ALIAS="lenses-io"
+
+              # Create base Lenses Configuration
+              cat << EOF > /opt/lenses/lenses.conf
+              lenses.port=9991
+
+              lenses.secret.file=security.conf
+              lenses.sql.state.dir="/mnt/persistent/kafka-streams-state"
+              lenses.storage.directory="/mnt/persistent/storage"
+              lenses.license.file=license.json
+              EOF
+
+
+              # Create Lenses License
+              cat << EOF > /opt/lenses/license.json
+              EOF
+
+            - |
+
+              EC2_INSTANCE_ID="`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`"
+              ADMIN_PASS=$EC2_INSTANCE_ID
+
+              # Create Lenses Security configuration
+              cat << EOF > /opt/lenses/security.conf
+              lenses.security.user="admin"
+              lenses.security.password="${ADMIN_PASS}"
+              EOF
+
+              if [ "${LENSES_STORAGE_TYPE}" == "postgres" ]; then
+              cat << EOF >> /opt/lenses/lenses.conf
+              lenses.storage.postgres.database: "${LENSES_STORAGE_POSTGRES_DATABASE}"
+              lenses.storage.postgres.host: "${LENSES_STORAGE_POSTGRES_HOSTNAME}"
+              lenses.storage.postgres.port: 5432
+              lenses.storage.postgres.username: "${LENSES_STORAGE_POSTGRES_USERNAME}"
+              EOF
+              cat << EOF >> /opt/lenses/security.conf
+              lenses.storage.postgres.password: "${LENSES_STORAGE_POSTGRES_PASSWORD}"
+              EOF
+              fi
+
+              if [ ! -z "$MSK_CLUSTER_ARN" ]; then
+              CLUSTER_PROTOCOL=$(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq -r '.ClusterInfo.EncryptionInfo.EncryptionInTransit.ClientBroker')
+              echo "[INFO] MSK Brokers Transit: $CLUSTER_PROTOCOL"
+              case $CLUSTER_PROTOCOL in
+              PLAINTEXT)
+                  ;;
+              TLS | TLS_PLAINTEXT)
+                  # TLS support 
+                  JSON_CLUSTER_TRANSIT=".BootstrapBrokerStringTls"
+                  CONN_PROTOCOL="SSL"
+                  
+                  mkdir -p /var/private/ssl
+                  cp /usr/lib/jvm/java-1.8.0/jre/lib/security/cacerts /var/private/ssl/client.truststore.jks
+
+                  SASL_SCRAM_ENABLED="$(aws kafka describe-cluster \
+                          --cluster-arn "${MSK_CLUSTER_ARN}" \
+                          --region "${AWS_REGION}"  | jq -r '.ClusterInfo.ClientAuthentication.Sasl.Scram.Enabled')"
+
+                  if [[ "${SASL_SCRAM_ENABLED}" == "true" ]]; then
+                  sasl_scram_secret="$(aws secretsmanager  get-secret-value --secret-id "${MSK_SECRET_NAME}" --region "${AWS_REGION}" | jq -r '.SecretString')"
+                  sasl_cram_username="$(echo "${sasl_scram_secret}" | jq -r '.username')"
+                  sasl_cram_password="$(echo "${sasl_scram_secret}" | jq -r '.password')"
+                  cat >/etc/users_jaas.conf<<CMD
+              KafkaClient {
+                org.apache.kafka.common.security.scram.ScramLoginModule required
+                username="${sasl_cram_username}"
+                password="${sasl_cram_password}";
+              };
+              CMD
+                  chmod 0600 /etc/users_jaas.conf
+
+                  sed -i 's/PermissionsStartOnly\=true/PermissionsStartOnly\=true\nEnvironment\=LENSES_OPTS\="\-Djava\.security\.auth\.login\.config=\/etc\/users\_jaas\.conf"/' /etc/systemd/system/lenses-io.service
+                  export CONN_PROTOCOL="SASL_SSL"
+                  export JSON_CLUSTER_TRANSIT=".BootstrapBrokerStringSaslScram"
+
+                  
+                  echo 'lenses.kafka.settings.client.sasl.mechanism=SCRAM-SHA-512' >> /opt/lenses/lenses.conf
+                  fi
+                  echo "lenses.kafka.settings.client.security.protocol=${CONN_PROTOCOL}" >> /opt/lenses/lenses.conf
+                  echo 'lenses.kafka.settings.client.ssl.truststore.location=/var/private/ssl/client.truststore.jks' >> /opt/lenses/lenses.conf
+
+                  CLUSTER_PRIVATE_CA_ARN=$(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq -r '.ClusterInfo.ClientAuthentication.Tls.CertificateAuthorityArnList | .[0]')
+                  # TLS support with Authentication
+                  if [ "$CLUSTER_PRIVATE_CA_ARN" != "null" ]; then
+                      keytool -genkey -keystore /var/private/ssl/client.keystore.jks  \
+                          -validity 300 -storepass $ADMIN_PASS \
+                          -keypass $ADMIN_PASS \
+                          -dname "CN=$KEY_ALIAS" \
+                          -alias $KEY_ALIAS \
+                          -storetype pkcs12
+
+                      keytool -keystore /var/private/ssl/client.keystore.jks  \
+                          -certreq -file client-cert-sign-request \
+                          -alias $KEY_ALIAS \
+                          -storepass $ADMIN_PASS \
+                          -keypass $ADMIN_PASS
+                      
+                      # Remove NEW word (AWS recommendation) in order to issue-certificate
+                      sed -i 's/NEW //g' client-cert-sign-request
+                      # Create a certificate request
+                      CERTIFICATE_REQUEST_ARN=$(/usr/local/bin/aws acm-pca issue-certificate --region $AWS_REGION --certificate-authority-arn $CLUSTER_PRIVATE_CA_ARN --csr file://client-cert-sign-request --signing-algorithm "SHA256WITHRSA" --validity Value=300,Type="DAYS" | jq -r '.CertificateArn')
+                      # Wait Certificate request to finish
+                      sleep 20
+                      # Get certification for the new Certificate Request
+                      /usr/local/bin/aws acm-pca get-certificate --region $AWS_REGION --certificate-authority-arn $CLUSTER_PRIVATE_CA_ARN --certificate-arn $CERTIFICATE_REQUEST_ARN >> result.json
+
+                      CERTIFICATE=$(cat result.json | jq -r '.Certificate')
+                      CERTIFICATE_CHAIN=$(cat result.json | jq -r '.CertificateChain')
+
+                      # Create Signed certificate from ACM
+                      cat << EOF > /var/private/ssl/signed-certificate-from-acm
+              $CERTIFICATE
+              $CERTIFICATE_CHAIN
+              EOF
+                      yes | keytool -keystore /var/private/ssl/client.keystore.jks \
+                          -import -file /var/private/ssl/signed-certificate-from-acm \
+                          -alias $KEY_ALIAS \
+                          -storepass $ADMIN_PASS \
+                          -keypass $ADMIN_PASS
+
+                      # Create the keystore configuration
+                      echo lenses.kafka.settings.client.ssl.keystore.location="/var/private/ssl/client.keystore.jks" >> /opt/lenses/lenses.conf
+                      echo lenses.kafka.settings.client.ssl.keystore.password="\"$ADMIN_PASS"\" >> /opt/lenses/lenses.conf
+                      echo lenses.kafka.settings.client.ssl.key.password="\"$ADMIN_PASS"\" >> /opt/lenses/lenses.conf
+                      # append empty line
+                      echo "" >> /opt/lenses/lenses.conf
+
+                      # Cleanup
+                      rm result.json
+                  fi
+                  ;;
+
+              *)
+                  echo "[ERROR] Uknown MSK Protocol"         
+                  exit 1
+                  ;;
+                  esac
+
+                  # Create the connection string for the brokers
+                  BOOTSTRAP_BROKERS=($(/usr/local/bin/aws kafka get-bootstrap-brokers --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq  -r "$JSON_CLUSTER_TRANSIT" | tr "," "\n"))
+                  for BROKER in "${BOOTSTRAP_BROKERS[@]}"
+                  do
+                      BROKERS="${BROKERS:+$BROKERS,}$CONN_PROTOCOL://$BROKER"
+                  done
+
+                  # Create the connection string for the zookeepers
+                  ZOOKEEPER_CONN=($(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq  -r '.ClusterInfo.ZookeeperConnectString' | tr "," "\n"))
+                  echo $ZOOKEEPER_CONN
+                  for ZK in ${ZOOKEEPER_CONN[@]}; do
+                      ZOOKEEPERS="${ZOOKEEPERS:+$ZOOKEEPERS, }{url:\"$ZK\"}"
+                  done
+                  ZOOKEEPERS="[$ZOOKEEPERS]"
+
+                  IS_OPEN_MONITORING_ENABLED=$(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq -r '.ClusterInfo.OpenMonitoring.Prometheus.JmxExporter.EnabledInBroker')
+              fi
+
+              if [ -z "$BROKERS" ]; then
+                  echo "[ERROR] Unable to configure Kafka Brokers."         
+                  exit 1
+              fi
+
+              # Append Lenses configuration
+              echo lenses.kafka.brokers="\"$BROKERS"\" >> /opt/lenses/lenses.conf
+
+              if [ ! -z "$ZOOKEEPERS" ]; then
+                  echo lenses.zookeeper.hosts="$ZOOKEEPERS" >> /opt/lenses/lenses.conf
+              fi
+
+              if [ ! -z "$SCHEMA_REGISTRY_URLS" ]; then
+                  echo lenses.schema.registry.urls="$SCHEMA_REGISTRY_URLS" >> /opt/lenses/lenses.conf
+              fi
+
+              if [ ! -z "$CONNECT_URLS" ]; then
+                  echo lenses.kafka.connect.clusters="$CONNECT_URLS" >> /opt/lenses/lenses.conf
+              fi
+
+              if $IS_OPEN_MONITORING_ENABLED; then
+                MSK_NODES=($(/usr/local/bin/aws kafka list-nodes --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq  -r ".NodeInfoList[]  | @base64"))
+                for NODE in "${MSK_NODES[@]}"
+                do
+                  BROKER_ID=$(echo $NODE | base64 --decode | jq -r ${1} '.BrokerNodeInfo.BrokerId')
+                  BROKER_ENDPOINT=$(echo $NODE | base64 --decode | jq -r ${1} ".BrokerNodeInfo.Endpoints[]")
+                  KAFKA_METRICS_PORT="${KAFKA_METRICS_PORT:+$KAFKA_METRICS_PORT,}{id: $BROKER_ID,  url:\"http://$BROKER_ENDPOINT:11001/metrics\"}"
+                done
+                # Append to Lenses conf
+                echo lenses.kafka.metrics={type: "AWS", port: [$KAFKA_METRICS_PORT]} >> /opt/lenses/lenses.conf
+              fi
+
+              # Start Lenses Service
+              systemctl restart lenses-io
+              systemctl enable lenses-io.service
+
+              # Create configuration for AWS Cloudwatch Logging
+              mkdir -p /etc/awslogs
+              cat << EOF > /etc/awslogs/awscli.conf
+              [plugins]
+              cwlogs = cwlogs
+              [default]
+              region = $AWS_REGION
+              EOF
+
+              cat /dev/null > /etc/awslogs/awslogs.conf
+              cat << EOF > /etc/awslogs/awslogs.conf
+              [general]
+              state_file= /var/awslogs/state/agent-state
+              [/opt/lenses/logs/lenses]
+              file = /opt/lenses/logs/lenses.log
+              log_group_name = $CLOUDWATCH_LOG_GROUP
+              log_stream_name = $EC2_INSTANCE_ID/lenses.log
+
+              [/opt/lenses/logs/lenses-warn]
+              file = /opt/lenses/logs/lenses-warn.log
+              log_group_name = $CLOUDWATCH_LOG_GROUP
+              log_stream_name = $EC2_INSTANCE_ID/lenses-warn.log
+
+              [/opt/lenses/logs/lenses-metrics]
+              file = /opt/lenses/logs/metrics.log
+              log_group_name = $CLOUDWATCH_LOG_GROUP
+              log_stream_name = $EC2_INSTANCE_ID/lenses-metrics.log
+              EOF
+
+              systemctl restart awslogsd
+              systemctl enable awslogsd.service
+
+              echo "AWS_DEFAULT_REGION=${AWS_REGION}" >> /etc/environment
+
+              if [ "${CloudWatchCustomMetrics}" == "Yes" ] && [ -e /opt/awscloudwatch.py ]; then
+                systemctl enable --now cloudwatch_metrics.service
+              fi
+
+
+  # Gather Logs from Cloudwatch with the stack group name
+  CloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties: 
+        LogGroupName: !Ref AWS::StackName
+
+  LensesSecurityGroup:
+      Type: "AWS::EC2::SecurityGroup"
+      Properties:
+        GroupDescription : "Enable HTTP and SSH access For Lenses"
+        VpcId: !Ref VPC
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref SSHLocation
+          Description: Access Lenses with SSH
+        - IpProtocol: tcp
+          FromPort: 9991
+          ToPort: 9991
+          CidrIp: !Ref LensesLocation
+          Description: Access Lenses in Web
+        - IpProtocol: '-1'
+          SourceSecurityGroupId: !Ref MSKSecurityGroup
+          Description: Allow traffic for MSK
+        SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: "0.0.0.0/0"
+
+  MSKSecurityIngress:
+      Type: "AWS::EC2::SecurityGroupIngress"
+      Properties:
+        GroupId: !Ref MSKSecurityGroup
+        IpProtocol: "-1"
+        SourceSecurityGroupId: !GetAtt LensesSecurityGroup.GroupId
+
+  IAMProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Path: /
+      Roles:
+        - !Ref EC2Role
+      InstanceProfileName: !Sub ec2-iam-profile-${AWS::StackName}
+
+  EC2Role: 
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub EC2-${AWS::StackName}
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ec2.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+        - PolicyName: EC2-LensesRolePolicy
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                # Allow the EC2 instance to upload logs to CloudWatch
+                - 'logs:CreateLogGroup'
+                - 'logs:CreateLogStream'
+                - 'logs:PutLogEvents'
+                # Allow the EC2 instance to get Kafka connection details
+                - 'kafka:Describe*'
+                - 'kafka:List*'
+                - 'kafka:Get*'  
+                # Allow the EC2 instannce to get/issue a certificate for Kafka
+                - 'acm-pca:IssueCertificate'
+                - 'acm-pca:GetCertificate'
+              Resource: '*'
+        - PolicyName: MSKSecretRole
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                - "secretsmanager:GetSecretValue"
+                - "secretsmanager:DescribeSecret"
+                - "kms:Decrypt"
+              Resource: 
+                - "Fn::Join": ["", ["arn:aws:secretsmanager:",{"Ref": "AWS::Region"},":",{"Ref": "AWS::AccountId"},":secret:", {"Ref": "MSKSecretName"}, "*",]]
+                - "Fn::Join": ["", ["arn:aws:kms:",{"Ref": "AWS::Region"},":",{"Ref": "AWS::AccountId"},":key/", {"Ref": "MSKSecretDecryptionKMSKey"}]]
+  
+        - PolicyName: EC2-Cloudwacth_MetricData_Policy
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                # Allow the ECS tasks to upload metrics to CloudWatch
+                - 'cloudwatch:PutMetricData'
+              Resource: '*'
+
+Outputs:
+  FQDN:
+    Description: "FQDN for EC2 instance"
+    Value: !Join [":", [!GetAtt Lenses.PublicDnsName, "9991"]]
