@@ -75,7 +75,6 @@ Parameters:
     Default: local
     AllowedValues:
       - local
-      - postgres
     Description: Storage Mode
 
   LensesWebIngressCIDR:
@@ -246,6 +245,8 @@ Metadata:
         default: The IP address range that can be used to SSH to the Lenses EC2 instances
       LensesSchemaRegistryURLs:
         default: Schema Registry JSON
+      LensesStorage:
+        default: Lenses Storage preference
       LensesWebIngressCIDR:
         default: The IP address range that can be used to accees the Lenses EC2 instances over Web
       MSKApacheKafkaVersion:
