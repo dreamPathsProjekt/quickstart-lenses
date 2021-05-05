@@ -24,8 +24,6 @@ endif::marketplace_subscription[]
 
 Each deployment takes about {deployment_time} to complete.
 
-. Create an Amazon MSK cluster without Authentication and enable Open Monitoring
-
 . Subscribe to the marketplace
 
 . Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where the network infrastructure for {partner-product-short-name} is built. The template is launched in the {default_deployment_region} Region by default. For other choices, see link:#_supported_regions[Supported Regions] earlier in this guide.
