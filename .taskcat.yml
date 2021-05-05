@@ -1,0 +1,16 @@
+project:
+  name: quickstart-lenses-io
+  package_lambda: false
+  s3_bucket: 
+  regions:
+    - eu-west-1
+tests:
+  default:
+    template: templates/main.template.yaml
+    parameters:
+      AvailabilityZones: eu-west-1a,eu-west-1b
+      LensesWebIngressCIDR: 
+      LensesSSHIngressCIDR: 
+      QSS3BucketName: 
+      QSS3BucketRegion: eu-west-1
+      QSS3KeyPrefix: quickstart-lenses-io/

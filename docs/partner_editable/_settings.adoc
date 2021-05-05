@@ -1,12 +1,12 @@
 :quickstart-project-name: quickstart-lenses
-:partner-product-name: Lenses.io EC2 - MSK
-:partner-company-name: Lenses.io
-:partner-product-short-name: Lenses.io
+:partner-product-name: Lenses EC2 - MSK
+:partner-company-name: Lenses
+:partner-product-short-name: Lenses
 :doc-month: March
 :doc-year: 2021
-:partner-contributors: Spiros Economakis, {partner-company-name}
-:quickstart-contributors: Shivansh Singh, AWS Quick Start team
-:deployment_time: 5 minutes
+:partner-contributors: Spiros Economakis, Lenses
+:quickstart-contributors: Siva Sadhu, Sr. Partner Solutions Architect
+:deployment_time: 40 minutes
 :default_deployment_region: us-east-1
 :production_build:
 :marketplace_subscription:

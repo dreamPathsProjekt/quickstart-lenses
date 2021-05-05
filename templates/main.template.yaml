@@ -1,0 +1,379 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: Deploy Lenses Quickstart with MSK
+
+Parameters:
+  AvailabilityZones:
+    Type: "List<AWS::EC2::AvailabilityZone::Name>"
+    Description: "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and only 2 AZs are used for this deployment."
+
+  LensesCloudWatchMetrics:
+    Type: String
+    Default: "No"
+    AllowedValues:
+      - "Yes"
+      - "No"
+    Description: Send all consumer metrics of lenses_endpoint/metrics to cloudwatch
+
+  LensesConnectURLs:
+    Type: String
+    Default: ""
+    Description: "Connect Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect"
+
+  LensesInstanceType:
+    Type: String
+    Default: t2.large
+    AllowedValues:
+      - t2.large
+      - t2.xlarge
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - m4.16xlarge
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+      - c5.4xlarge
+      - c5.9xlarge
+      - r4.large
+      - r4.xlarge
+      - r4.2xlarge
+      - r4.4xlarge
+      - r4.8xlarge
+      - r4.16xlarge
+    Description: Lenses EC2 instance type
+
+  LensesSSHIngressCIDR:
+    Type: String
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0  to allow all IP addresses access, or another CIDR range.
+    MaxLength: "18"
+    MinLength: "9"
+
+  LensesSchemaRegistryURLs:
+    Type: String
+    Default: ""
+    Description: "Schema Registry Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#schema-registry"
+
+  LensesStorage:
+    Type: String
+    Default: local
+    AllowedValues:
+      - local
+    Description: Storage Mode
+
+  LensesWebIngressCIDR:
+    Type: String
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0 to  allow all IP addresses access, or another CIDR range.
+    MaxLength: "18"
+    MinLength: "9"
+
+  MSKApacheKafkaVersion:
+    Type: String
+    Default: "2.6.1"
+    AllowedValues:
+      - "2.2.1"
+      - "2.3.1"
+      - "2.4.1.1"
+      - "2.5.1"
+      - "2.6.0"
+      - "2.6.1"
+      - "2.6.2"
+      - "2.7.0"
+      - "2.8.0"
+    Description: The Apache Kafka version that on the brokers.
+
+  MSKBrokerType:
+    Type: String
+    Default: kafka.m5.large
+    AllowedValues:
+      - kafka.t3.small
+      - kafka.m5.large
+      - kafka.m5.xlarge
+      - kafka.m5.2xlarge
+      - kafka.m5.4xlarge
+      - kafka.m5.8xlarge
+      - kafka.m5.12xlarge
+      - kafka.m5.16xlarge
+      - kafka.m5.24xlarge
+    Description: The type of a broker determines its compute, memory, and storage capabilities. For information to help you pick a type, see Amazon MSK sizing and pricing
+
+  MSKEBSStorageVolumeSize:
+    Type: Number
+    Default: 100
+    Description: "EBS storage volume per broker in GiB. You can't decrease the storage after the cluster is created."
+    MaxValue: 16384
+    MinValue: 1
+
+  MSKEncryptionInTransit:
+    Type: String
+    Default: TLS
+    AllowedValues:
+      - TLS
+    Description: Encryption in transit
+
+  MSKEncryptionWithinCluster:
+    Type: String
+    Default: true
+    Description: Encryption within the cluster
+
+  MSKEnhancedMonitoring:
+    Type: String
+    Default: PER_TOPIC_PER_BROKER
+    AllowedValues:
+      - DEFAULT
+      - PER_BROKER
+      - PER_TOPIC_PER_BROKER
+    Description: Specifies the level of monitoring for the MSK cluster.
+
+  MSKNumberOfBrokerNodes:
+    Type: Number
+    Default: 2
+    Description: The number of broker nodes you want in the Amazon MSK cluster.
+
+  PrivateSubnet1CIDR:
+    Type: String
+    Default: "10.0.0.0/19"
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Description: CIDR block for private subnet 1 located in Availability Zone 1.
+
+  PrivateSubnet2CIDR:
+    Type: String
+    Default: "10.0.32.0/19"
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Description: CIDR block for private subnet 2 located in Availability Zone 2.
+
+  PublicSubnet1CIDR:
+    Type: String
+    Default: "10.0.128.0/20"
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Description: CIDR Block for the public DMZ subnet 1 located in Availability Zone 1
+
+  QSS3BucketName:
+    Type: String
+    Default: aws-quickstart
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+
+  QSS3BucketRegion:
+    Type: String
+    Default: us-east-1
+    Description: The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
+
+  QSS3KeyPrefix:
+    Type: String
+    Default: quickstart-lenses-io/
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
+
+  VPCCIDR:
+    Type: String
+    Default: "10.0.0.0/16"
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Description: CIDR Block for the VPC
+
+Metadata:
+  "AWS::CloudFormation::Interface":
+    ParameterGroups:
+      - Label:
+          default: Network Configuration
+        Parameters:
+          - AvailabilityZones
+          - VPCCIDR
+          - PrivateSubnet1CIDR
+          - PrivateSubnet2CIDR
+          - PublicSubnet1CIDR
+      - Label:
+          default: MSK Configuration
+        Parameters:
+          - MSKApacheKafkaVersion
+          - MSKBrokerType
+          - MSKEBSStorageVolumeSize
+          - MSKNumberOfBrokerNodes
+          - MSKEncryptionWithinCluster
+          - MSKEncryptionInTransit
+          - MSKEnhancedMonitoring
+      - Label:
+          default: Lenses Configuration
+        Parameters:
+          - LensesInstanceType
+          - LensesSSHIngressCIDR
+          - LensesWebIngressCIDR
+          - LensesStorage
+          - LensesSchemaRegistryURLs
+          - LensesConnectURLs
+          - LensesCloudWatchMetrics
+      - Label:
+          default: AWS Quick Start Configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3BucketRegion
+          - QSS3KeyPrefix
+    ParameterLabels:
+      AvailabilityZones:
+        default: VPC to deploy MSK and Lenses
+      LensesCloudWatchMetrics:
+        default: Lenses CloudWatch Metrics
+      LensesConnectURLs:
+        default: Connect JSON
+      LensesInstanceType:
+        default: Lenses Instance Type
+      LensesSSHIngressCIDR:
+        default: The IP address range that can be used to SSH to the Lenses EC2 instances
+      LensesSchemaRegistryURLs:
+        default: Schema Registry JSON
+      LensesStorage:
+        default: Lenses Storage preference
+      LensesWebIngressCIDR:
+        default: The IP address range that can be used to accees the Lenses EC2 instances over Web
+      MSKApacheKafkaVersion:
+        default: MSK Apache Kafka Version
+      MSKBrokerType:
+        default: MSK Broker Type
+      MSKEBSStorageVolumeSize:
+        default: MSK EBS Storage Volume Size
+      MSKEncryptionInTransit:
+        default: MSK Encryption In Transit
+      MSKEncryptionWithinCluster:
+        default: MSK Encryption Within Cluster
+      MSKEnhancedMonitoring:
+        default: MSK Enhanced Monitoring
+      MSKNumberOfBrokerNodes:
+        default: MSK Number Of Broker Nodes
+      PrivateSubnet1CIDR:
+        default: Private Subnet 1 CIDR
+      PrivateSubnet2CIDR:
+        default: Private Subnet 2 CIDR
+      PublicSubnet1CIDR:
+        default: Public Subnet 1 CIDR
+      QSS3BucketName:
+        default: Quick Start S3 Bucket Name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket region
+      QSS3KeyPrefix:
+        default: Quick Start S3 Key Prefix
+      VPCCIDR:
+        default: VPC to deploy MSK and Lenses
+
+  QuickStartDocumentation:
+    EntrypointName: Launch Lenses.io with MSK
+    OptionalParameters:
+      - LensesSchemaRegistryURLs
+      - LensesConnectURLs
+
+Conditions:
+  UsingDefaultBucket: !Equals
+    - Ref: QSS3BucketName
+    - aws-quickstart
+
+Resources:
+  VPCStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      Parameters:
+        AvailabilityZones: !Join
+          - ","
+          - Ref: AvailabilityZones
+        NumberOfAZs: "2"
+        PrivateSubnet1ACIDR: !Ref PrivateSubnet1CIDR
+        PrivateSubnet2ACIDR: !Ref PrivateSubnet2CIDR
+        PublicSubnet1CIDR: !Ref PublicSubnet1CIDR
+        VPCCIDR: !Ref VPCCIDR
+      TemplateURL: !Sub
+        - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml"
+        - S3Bucket: !If
+            - UsingDefaultBucket
+            - "Fn::Sub": "${QSS3BucketName}-${AWS::Region}"
+            - Ref: QSS3BucketName
+          S3Region: !If
+            - UsingDefaultBucket
+            - Ref: "AWS::Region"
+            - Ref: QSS3BucketRegion
+
+  MSKStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      Parameters:
+        ApacheKafkaVersion: !Ref MSKApacheKafkaVersion
+        BrokerType: !Ref MSKBrokerType
+        ClusterName: !Join
+          - "-"
+          - - quickstart-cluster
+            - "Fn::Select":
+                - 4
+                - "Fn::Split":
+                    - "-"
+                    - "Fn::Select":
+                        - 2
+                        - "Fn::Split":
+                            - /
+                            - Ref: "AWS::StackId"
+        EBSStorageVolumeSize: !Ref MSKEBSStorageVolumeSize
+        EncryptionInTransit: !Ref MSKEncryptionInTransit
+        EncryptionWithinCluster: !Ref MSKEncryptionWithinCluster
+        EnhancedMonitoring: !Ref MSKEnhancedMonitoring
+        NumberOfBrokerNodes: !Ref MSKNumberOfBrokerNodes
+        PrivateSubnetOneID: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
+        PrivateSubnetTwoID: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
+        VPCID: !GetAtt VPCStack.Outputs.VPCID
+      TemplateURL: !Sub
+        - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/msk.template.yaml"
+        - S3Bucket: !If
+            - UsingDefaultBucket
+            - "Fn::Sub": "${QSS3BucketName}-${AWS::Region}"
+            - Ref: QSS3BucketName
+          S3Region: !If
+            - UsingDefaultBucket
+            - Ref: "AWS::Region"
+            - Ref: QSS3BucketRegion
+
+  LensesStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      Parameters:
+        CloudWatchMetrics: !Ref LensesCloudWatchMetrics
+        ConnectURLs: !Ref LensesConnectURLs
+        InstanceType: !Ref LensesInstanceType
+        LensesLocation: !Ref LensesWebIngressCIDR
+        LensesStorage: !Ref LensesStorage
+        MSKClusterARN: !GetAtt MSKStack.Outputs.MSKClusterArn
+        MSKSecretDecryptionKMSKey: ""
+        MSKSecretName: ""
+        MSKSecurityGroup: !GetAtt MSKStack.Outputs.MSKSecurityGroupID
+        SSHLocation: !Ref LensesSSHIngressCIDR
+        SchemaRegistryURLs: !Ref LensesSchemaRegistryURLs
+        SubnetId: !GetAtt VPCStack.Outputs.PublicSubnet1ID
+        VPC: !GetAtt VPCStack.Outputs.VPCID
+      TemplateURL: !Sub
+        - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/lenses-io.template.yaml"
+        - S3Bucket: !If
+            - UsingDefaultBucket
+            - "Fn::Sub": "${QSS3BucketName}-${AWS::Region}"
+            - Ref: QSS3BucketName
+          S3Region: !If
+            - UsingDefaultBucket
+            - Ref: "AWS::Region"
+            - Ref: QSS3BucketRegion

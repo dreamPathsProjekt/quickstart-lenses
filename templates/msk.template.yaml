@@ -1,0 +1,164 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  ApacheKafkaVersion:
+    Type: String
+    Default: "2.6.1"
+    AllowedValues:
+      - "2.2.1"
+      - "2.3.1"
+      - "2.4.1.1"
+      - "2.5.1"
+      - "2.6.0"
+      - "2.6.1"
+      - "2.6.2"
+      - "2.7.0"
+      - "2.8.0"
+    Description: The Apache Kafka version that on the brokers.
+
+  BrokerType:
+    Type: String
+    Default: kafka.m5.large
+    AllowedValues:
+      - kafka.t3.small
+      - kafka.m5.large
+      - kafka.m5.xlarge
+      - kafka.m5.2xlarge
+      - kafka.m5.4xlarge
+      - kafka.m5.8xlarge
+      - kafka.m5.12xlarge
+      - kafka.m5.16xlarge
+      - kafka.m5.24xlarge
+    Description: The type of a broker determines its compute, memory, and storage capabilities. For information to help you pick a type, see Amazon MSK sizing and pricing
+
+  ClusterName:
+    Type: String
+    Default: qs-msk-cluster
+    AllowedPattern: "[a-zA-Z0-9\\-]+"
+    Description: MSK Cluster name. Cannot be changed after creation
+    MaxLength: "64"
+    MinLength: "1"
+
+  EBSStorageVolumeSize:
+    Type: Number
+    Default: 100
+    Description: "EBS storage volume per broker in GiB. You can't decrease the storage after the cluster is created."
+    MaxValue: 16384
+    MinValue: 1
+
+  EncryptionInTransit:
+    Type: String
+    Default: TLS
+    AllowedValues:
+      - TLS
+    Description: Encryption in transit
+
+  EncryptionWithinCluster:
+    Type: String
+    Default: true
+    Description: Encryption within the cluster
+
+  EnhancedMonitoring:
+    Type: String
+    Default: PER_TOPIC_PER_BROKER
+    AllowedValues:
+      - DEFAULT
+      - PER_BROKER
+      - PER_TOPIC_PER_BROKER
+    Description: Specifies the level of monitoring for the MSK cluster.
+
+  NumberOfBrokerNodes:
+    Type: Number
+    Default: 3
+    Description: The number of broker nodes you want in the Amazon MSK cluster.
+
+  PrivateSubnetOneID:
+    Type: "AWS::EC2::Subnet::Id"
+    Description: ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)
+
+  PrivateSubnetTwoID:
+    Type: "AWS::EC2::Subnet::Id"
+    Description: ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
+
+  VPCID:
+    Type: "AWS::EC2::VPC::Id"
+    Description: ID of the VPC (e.g., vpc-0343606e)
+
+Metadata:
+  "AWS::CloudFormation::Interface":
+    ParameterGroups:
+      - Label:
+          default: Network Configuration
+        Parameters:
+          - VPCID
+          - PrivateSubnetOneID
+          - PrivateSubnetTwoID
+      - Label:
+          default: MSK General Configuration
+        Parameters:
+          - ClusterName
+          - ApacheKafkaVersion
+          - EBSStorageVolumeSize
+      - Label:
+          default: MSK Storage Configuration
+        Parameters:
+          - EBSStorageVolumeSize
+      - Label:
+          default: MSK Brokers Configuration
+        Parameters:
+          - BrokerType
+          - NumberOfBrokerNodes
+      - Label:
+          default: MSK Encryption Configuration
+        Parameters:
+          - EncryptionWithinCluster
+          - EncryptionInTransit
+      - Label:
+          default: MSK Monitoring Configuration
+        Parameters:
+          - EnhancedMonitoring
+
+Resources:
+  MSKSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      Tags:
+        - Key: StackName
+          Value: !Ref "AWS::StackName"
+      VpcId: !Ref VPCID
+
+  MSKCluster:
+    Type: "AWS::MSK::Cluster"
+    Properties:
+      BrokerNodeGroupInfo:
+        ClientSubnets:
+          - Ref: PrivateSubnetOneID
+          - Ref: PrivateSubnetTwoID
+        InstanceType: !Ref BrokerType
+        SecurityGroups:
+          - "Fn::GetAtt":
+              - MSKSecurityGroup
+              - GroupId
+        StorageInfo:
+          EBSStorageInfo:
+            VolumeSize: !Ref EBSStorageVolumeSize
+      ClusterName: !Ref ClusterName
+      EncryptionInfo:
+        EncryptionInTransit:
+          ClientBroker: !Ref EncryptionInTransit
+          InCluster: !Ref EncryptionWithinCluster
+      EnhancedMonitoring: !Ref EnhancedMonitoring
+      KafkaVersion: !Ref ApacheKafkaVersion
+      NumberOfBrokerNodes: !Ref NumberOfBrokerNodes
+      Tags:
+        StackName: !Ref "AWS::StackName"
+
+Outputs:
+  MSKClusterArn:
+    Description: The Arn for the MSKCluster MSK cluster
+    Value: !Ref MSKCluster
+
+  MSKSecurityGroupID:
+    Description: The ID of the security group created for the MSK clusters
+    Value: !GetAtt MSKSecurityGroup.GroupId
