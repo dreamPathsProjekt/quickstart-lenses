@@ -3,7 +3,7 @@
 
 == Post-deployment steps
 
-. Copy the URL of the Lenses.io workspace in CloudFormation Outputs as <<outputs1>> and <<outputs2>> shows.
+. Copy the URL of the Lenses.io workspace in CloudFormation Outputs shown in <<outputs1>> and <<outputs2>>.
 . Use the instance ID as the password to login in Lenses.io workspace. Specifically *admin/<ec2-instance-id>*
 
 :xrefstyle: short
@@ -21,5 +21,5 @@ image::../images/instance-name.png[EC2InstanceIDLensesPassword,width=80%,height=
 == Security
 // Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
 
-The EC2 instance doesn't use SSH key pairs but it support EC2 Instance Connect as it is a secure way to use AWS Identity and Access Management (IAM) policies and principals to control SSH access  to your instances, removing the need to share and manage SSH keys. 
-You can find more details here https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html
+The EC2 instance doesn't use SSH key pairs but it supports EC2 Instance Connect as it is a secure way to use AWS Identity and Access Management (IAM) policies and principals to control SSH access to your instances, removing the need to share and manage SSH keys. 
+You can find more details at https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html

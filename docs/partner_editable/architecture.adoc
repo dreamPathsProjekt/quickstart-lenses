@@ -10,8 +10,9 @@ image::../images/architecture_diagram.png[Architecture1,width=80%,height=80%]
 
 As shown in <<architecture1>>, this deployment sets up the following, which constitutes the Lenses.io workspace in your AWS account:
 
-* An EC2 Instance with your selected choise about the instance type
-* A security group to access the Lenses.io Workspace and setup the rule for communicating
-with Amazon MSK
-* A Cloudwatch logs group where you can see the logs of Lenses.io workspace
-* An EBS storage where we store the data if you use the local storage option (default) in the CloudFormation template
+* A Managed Streaming for Apache Kafka (MSK) cluster.
+* An EC2 Instance with your selected instance type.
+* A security group to access the Lenses.io workspace and setup the rule for communicating
+with Amazon MSK.
+* A Cloudwatch log group where you can see the Lenses.io workspace logs.
+* An Elastic Block Storage (EBS) volume where the data is stored if you select the local storage option (default) when deploying the Quick Start.

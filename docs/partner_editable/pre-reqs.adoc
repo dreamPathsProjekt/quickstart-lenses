@@ -2,6 +2,6 @@
 
 ==== Prepare for the deployment
 
-- Create a Managed Streaming for Apache Kafka (Amazon MSK)
-- (Optional) Create a Managed Streaming for Apache Kafka (Amazon MSK) with SASL/SCRAM Authentication
-- (Optional) Create an Amazon RDS postgres database
+- If deploying into an existing VPC, create an Amazon Managed Streaming for Apache Kafka (MSK) cluster.
+- (Optional) Configure MSK with https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html[SASL/SCRAM Authentication].
+- (Optional) Create an Amazon RDS postgres database.
