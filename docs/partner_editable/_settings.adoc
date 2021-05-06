@@ -5,7 +5,7 @@
 :doc-month: March
 :doc-year: 2021
 :partner-contributors: Spiros Economakis, Lenses
-:quickstart-contributors: Siva Sadhu, Sr. Partner Solutions Architect
+:quickstart-contributors: Siva Sadhu and Dave May, AWS
 :deployment_time: 40 minutes
 :default_deployment_region: us-east-1
 :production_build:

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Lenses.io EC2 - MSK on the AWS Cloud</title>
+<title>Lenses EC2 - MSK on the AWS Cloud</title>
 <style>
 
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -787,7 +787,7 @@ a img {
 <div id="toctitle"></div>
 <ul class="sectlevel1">
 <li><a href="#_overview">Overview</a></li>
-<li><a href="#_lenses_io_ec2_msk_on_aws">Lenses.io EC2 - MSK on AWS</a></li>
+<li><a href="#_lenses_ec2_msk_on_aws">Lenses EC2 - MSK on AWS</a></li>
 <li><a href="#_cost">Cost</a></li>
 <li><a href="#_software_licenses">Software licenses</a></li>
 <li><a href="#_architecture">Architecture</a></li>
@@ -801,11 +801,8 @@ a img {
 <li><a href="#_deployment_steps">Deployment steps</a>
 <ul class="sectlevel2">
 <li><a href="#_sign_in_to_your_aws_account">Sign in to your AWS account</a></li>
-<li><a href="#_subscribe_to_the_lenses_io_ami">Subscribe to the Lenses.io AMI</a></li>
-<li><a href="#_lenses_io_with_amazon_msk_and_local_storage_ebs">Lenses.io with Amazon MSK and local storage (EBS)</a></li>
-<li><a href="#_lenses_io_with_amazon_msk_saslscram_and_local_storage_ebs">Lenses.io with Amazon MSK - SASL/SCRAM and local storage (EBS)</a></li>
-<li><a href="#_lenses_io_with_amazon_msk_and_amazon_rds">Lenses.io with Amazon MSK and Amazon RDS</a></li>
-<li><a href="#_lenses_io_metrics_to_cloudwatch">Lenses.io metrics to CloudWatch</a></li>
+<li><a href="#_subscribe_to_the_lenses_ami">Subscribe to the Lenses AMI</a></li>
+<li><a href="#_launch_the_quick_start">Launch the Quick Start</a></li>
 </ul>
 </li>
 <li><a href="#_post_deployment_steps">Post-deployment steps</a></li>
@@ -824,7 +821,7 @@ a img {
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<h2 id="_lenses_io_ec2_msk_on_the_aws_cloud" class="discrete text-center">Lenses.io EC2 - MSK on the AWS Cloud</h2>
+<h2 id="_lenses_ec2_msk_on_the_aws_cloud" class="discrete text-center">Lenses EC2 - MSK on the AWS Cloud</h2>
 <h2 id="_quick_start_reference_deployment" class="discrete text-left text-center">Quick Start Reference Deployment</h2>
 <div class="imageblock text-center">
 <div class="content">
@@ -833,8 +830,8 @@ a img {
 </div>
 <div class="paragraph text-center">
 <p><strong>March, 2021</strong><br>
-<em>Spiros Economakis, Lenses.io</em><br>
-<em>Shivansh Singh, AWS Quick Start team</em></p>
+<em>Spiros Economakis, Lenses</em><br>
+<em>Siva Sadhu and Dave May, AWS</em></p>
 </div>
 <div class="admonitionblock tip text-left">
 <table>
@@ -850,7 +847,7 @@ report bugs, or submit feature ideas for this Quick Start.
 </table>
 </div>
 <div class="paragraph text-left">
-<p>This Quick Start was created by Lenses.io in collaboration with Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
+<p>This Quick Start was created by Lenses in collaboration with Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
 </div>
 </div>
 </div>
@@ -858,10 +855,10 @@ report bugs, or submit feature ideas for this Quick Start.
 <h2 id="_overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide provides instructions for deploying the Lenses.io Quick Start reference architecture on the AWS Cloud.</p>
+<p>This guide provides instructions for deploying the Lenses Quick Start reference architecture on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start is for engineers who can shift their focus to delivering real-time data experiences and get their productivity back.</p>
+<p>This Quick Start is for engineers who want to discover, observe, and share streaming data.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -880,7 +877,7 @@ collaborated with AWS on the content of the Quick Start.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lenses_io_ec2_msk_on_aws">Lenses.io EC2 - MSK on AWS</h2>
+<h2 id="_lenses_ec2_msk_on_aws">Lenses EC2 - MSK on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Lenses.io delivers a DataOps developer workspace for real-time applications on any Apache Kafka.
@@ -923,7 +920,7 @@ After you deploy the Quick Start, enable the <a href="https://docs.aws.amazon.co
 <p>No licenses are required to deploy this Quick Start. All AWS service resources consumed during the launch of the Quick Start incur AWS service usage costs._</p>
 </div>
 <div class="paragraph">
-<p>The Quick Start requires a subscription to the Amazon Machine Image (AMI) for Lenses.io, which is available from <a href="https://aws.amazon.com/marketplace/" target="_blank" rel="noopener">AWS Marketplace</a>. Additional pricing, terms, and conditions may apply. For instructions, see <a href="#step-2.-subscribe-to-the-software-ami">step 2</a> in the deployment section.</p>
+<p>The Quick Start requires a subscription to the Amazon Machine Image (AMI) for Lenses, which is available from <a href="https://aws.amazon.com/marketplace/" target="_blank" rel="noopener">AWS Marketplace</a>. Additional pricing, terms, and conditions may apply. For instructions, see <a href="#step-2.-subscribe-to-the-software-ami">step 2</a> in the deployment section.</p>
 </div>
 </div>
 </div>
@@ -945,17 +942,20 @@ After you deploy the Quick Start, enable the <a href="https://docs.aws.amazon.co
 <div class="ulist">
 <ul>
 <li>
-<p>An EC2 Instance with your selected choise about the instance type</p>
+<p>A Managed Streaming for Apache Kafka (MSK) cluster.</p>
 </li>
 <li>
-<p>A security group to access the Lenses.io Workspace and setup the rule for communicating
-with Amazon MSK</p>
+<p>An EC2 Instance with your selected instance type.</p>
 </li>
 <li>
-<p>A Cloudwatch logs group where you can see the logs of Lenses.io workspace</p>
+<p>A security group to access the Lenses.io workspace and setup the rule for communicating
+with Amazon MSK.</p>
 </li>
 <li>
-<p>An EBS storage where we store the data if you use the local storage option (default) in the CloudFormation template</p>
+<p>A Cloudwatch log group where you can see the Lenses.io workspace logs.</p>
+</li>
+<li>
+<p>An Elastic Block Storage (EBS) volume where the data is stored if you select the local storage option (default) when deploying the Quick Start.</p>
 </li>
 </ul>
 </div>
@@ -1015,7 +1015,7 @@ Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Elastic Block Store</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Elastic Block Store volume</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
@@ -1028,6 +1028,10 @@ Cloud.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EC2 instances</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MSK clusters</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 </tbody>
@@ -1114,13 +1118,13 @@ Certain Regions are available on an opt-in basis. Refer to the AWS Documentation
 <div class="ulist">
 <ul>
 <li>
-<p>Create a Managed Streaming for Apache Kafka (Amazon MSK)</p>
+<p>If deploying into an existing VPC, create an Amazon Managed Streaming for Apache Kafka (MSK) cluster.</p>
 </li>
 <li>
-<p>(Optional) Create a Managed Streaming for Apache Kafka (Amazon MSK) with SASL/SCRAM Authentication</p>
+<p>(Optional) Configure MSK with SASL/SCRAM Authentication.</p>
 </li>
 <li>
-<p>(Optional) Create an Amazon RDS postgres database</p>
+<p>(Optional) Create an Amazon RDS postgres database.</p>
 </li>
 </ul>
 </div>
@@ -1128,12 +1132,15 @@ Certain Regions are available on an opt-in basis. Refer to the AWS Documentation
 <div class="sect3">
 <h4 id="_deployment_options">Deployment options</h4>
 <div class="paragraph">
-<p>This Quick Start provides one deployment option:</p>
+<p>This Quick Start provides two deployment options:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy Lenses.io into an existing VPC and with an existing MSK</strong>. This option provisions Lenses.io in your existing AWS infrastructure.</p>
+<p><strong>Deploy Lenses into a new VPC</strong>. This option provisions Lenses in a new AWS VPC.</p>
+</li>
+<li>
+<p><strong>Deploy Lenses into an existing VPC and with an existing MSK</strong>. This option provisions Lenses in your existing AWS infrastructure.</p>
 </li>
 </ul>
 </div>
@@ -1158,9 +1165,9 @@ Certain Regions are available on an opt-in basis. Refer to the AWS Documentation
 </div>
 </div>
 <div class="sect2">
-<h3 id="_subscribe_to_the_lenses_io_ami">Subscribe to the Lenses.io AMI</h3>
+<h3 id="_subscribe_to_the_lenses_ami">Subscribe to the Lenses AMI</h3>
 <div class="paragraph">
-<p>This Quick Start requires a subscription to the AMI for Lenses.io in AWS Marketplace.</p>
+<p>This Quick Start requires a subscription to the AMI for Lenses in AWS Marketplace.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1168,7 +1175,7 @@ Certain Regions are available on an opt-in basis. Refer to the AWS Documentation
 <p>Sign in to your AWS account.</p>
 </li>
 <li>
-<p>Open the page for the <a href="https://aws.amazon.com/marketplace/pp/B08BZGFSKY" target="_blank" rel="noopener">Lenses.io AMI in AWS Marketplace</a>, and then choose <strong>Continue to Subscribe</strong>.</p>
+<p>Open the page for the <a href="https://aws.amazon.com/marketplace/pp/B08BZGFSKY" target="_blank" rel="noopener">Lenses AMI in AWS Marketplace</a>, and then choose <strong>Continue to Subscribe</strong>.</p>
 </li>
 <li>
 <p>Review the terms and conditions for software usage, and then choose <strong>Accept Terms</strong>.<br>
@@ -1181,303 +1188,53 @@ A confirmation page loads, and an email confirmation is sent to the account owne
 </div>
 </div>
 <div class="sect2">
-<h3 id="_lenses_io_with_amazon_msk_and_local_storage_ebs">Lenses.io with Amazon MSK and local storage (EBS)</h3>
+<h3 id="_launch_the_quick_start">Launch the Quick Start</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If you&#8217;re deploying this Quick Start into an existing VPC, make sure that your VPC has two private subnets in different Availability Zones for the workload instances and that the subnets aren&#8217;t shared. This Quick Start doesn&#8217;t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">NAT gateways</a> in their route tables to allow the instances to download packages and software without exposing them to the internet. Also make sure that the domain name option in the DHCP options is configured as explained in <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">DHCP options sets</a>. You provide your VPC settings when you launch the Quick Start.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Each deployment takes about 5 minutes to complete.</p>
+<p>Each deployment takes about 40 minutes to complete.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Create an Amazon MSK cluster without Authentication and enable Open Monitoring</p>
+<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">Deployment options</a> earlier in this guide.</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 66.6666%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/XXXXX?" target="_blank" rel="noopener">Deploy into a new VPC</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/XXXXX?" target="_blank" rel="noopener">View template</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/XXXXX?" target="_blank" rel="noopener">Deploy into an existing VPC</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://fwd.aws/XXXXX?" target="_blank" rel="noopener">View template</a></p></td>
+</tr>
+</tbody>
+</table>
 </li>
 <li>
-<p>Subscribe to the marketplace</p>
+<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where the network infrastructure for Lenses is built. The template is launched in the us-east-1 Region by default. For other choices, see <a href="#_supported_regions">Supported Regions</a> earlier in this guide.</p>
 </li>
-<li>
-<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where the network infrastructure for Lenses.io is built. The template is launched in the us-east-1 Region by default. For other choices, see <a href="#_supported_regions">Supported Regions</a> earlier in this guide.</p>
-</li>
-</ol>
-</div>
-<div class="olist arabic">
-<ol class="arabic" start="2">
-<li>
-<p>Choose cloudformation to launch the AWS CloudFormation template as in <a href="#marketplace1">Figure 2</a></p>
-</li>
-</ol>
-</div>
-<div id="marketplace1" class="imageblock">
-<div class="content">
-<a class="image" href="images/marketplace_launch.png"><img src="images/marketplace_launch.png" alt="Marketplace1" width="80%" height="80%"></a>
-</div>
-<div class="title">Figure 2. Launch CloudFormation in Marketplace</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic" start="3">
 <li>
 <p>On the <strong>Create stack</strong> page, keep the default setting for the template URL, and then choose <strong>Next</strong>.</p>
 </li>
 <li>
-<p>On the <strong>Specify stack details</strong> page, change the stack name if needed.</p>
-</li>
-<li>
-<p>Review the parameters for the template. Provide values for the parameters that requires input</p>
+<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. For details on each parameter, see the <a href="#_parameter_reference">Parameter reference</a> section of this guide. When you finish reviewing and customizing the parameters, choose <strong>Next</strong>.</p>
 </li>
 </ol>
-</div>
-<div id="lensesiomsk" class="imageblock">
-<div class="content">
-<a class="image" href="images/lensesio_msk.png"><img src="images/lensesio_msk.png" alt="LensesioMSK" width="80%" height="80%"></a>
-</div>
-<div class="title">Figure 3. Example values for cloudformation parameters</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The VPC you want to deploy Lenses.io workspace. Recommend to be the same with Amazon MSK</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The VPC subnet you want to deploy Lenses.io workspace</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">InstanceType</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Recommended t3.large</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSHLocation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for SSH acccess</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LensesLocation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for Lenses.io workspace acccess</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS MSK ARN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The Amazon MSK cluster ARN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS MSK Security Group</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The Amazon MSK cluster security Group</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_lenses_io_with_amazon_msk_saslscram_and_local_storage_ebs">Lenses.io with Amazon MSK - SASL/SCRAM and local storage (EBS)</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Create an Amazon MSK cluster with SASL/SCRAM <a href="https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html" class="bare">https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html</a></p>
-</li>
-<li>
-<p>Follow the previous step by step for Lenses.io with Amazon MSK</p>
-</li>
-<li>
-<p>Create a Secret in Secrets manager as described here <a href="https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html#msk-password-tutorial" class="bare">https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html#msk-password-tutorial</a></p>
-</li>
-<li>
-<p>Review the parameters for the template in section <strong>AWS MSK SASl/SCRAM</strong></p>
-</li>
-</ol>
-</div>
-<div id="lensesiomsksasl" class="imageblock">
-<div class="content">
-<a class="image" href="images/lensesio_msk_sasl.png"><img src="images/lensesio_msk_sasl.png" alt="LensesioMSKSASL" width="80%" height="80%"></a>
-</div>
-<div class="title">Figure 4. Example values for cloudformation parameters for Amazon MSK SASL/SCRAM</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The VPC you want to deploy Lenses.io workspace. Recommend to be the same with Amazon MSK</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The VPC subnet you want to deploy Lenses.io workspace</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">InstanceType</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Recommended t3.large</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSHLocation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for SSH acccess</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LensesLocation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for Lenses.io workspace acccess</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS MSK ARN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The Amazon MSK cluster ARN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS MSK Security Group</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The Amazon MSK cluster security Group</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MSK Associated MSKSecretNameSecret</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The name of secret you created with the prefi <strong>AmazonMSK_</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MSKSecretDecryptionKMSKey</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The KMS Symetric key that will be used to decrypt the secret</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_lenses_io_with_amazon_msk_and_amazon_rds">Lenses.io with Amazon MSK and Amazon RDS</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Create an Amazon RDS or use an existing one with Postgres engine</p>
-</li>
-<li>
-<p>Follow the previous step by step for Lenses.io with Amazon MSK</p>
-</li>
-<li>
-<p>Review the parameters for the template in section <strong>Lenses Storage</strong>. Slect <strong>postgres</strong> for the storage type and provide values for the parameters that requires input</p>
-</li>
-</ol>
-</div>
-<div id="lensesiords" class="imageblock">
-<div class="content">
-<a class="image" href="images/lensesio_rds.png"><img src="images/lensesio_rds.png" alt="LensesioRDS" width="80%" height="80%"></a>
-</div>
-<div class="title">Figure 5. Example values for cloudformation parameters for Amazon RDS with postgres engine</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The VPC you want to deploy Lenses.io workspace. Recommend to be the same with Amazon MSK</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The VPC subnet you want to deploy Lenses.io workspace</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">InstanceType</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Recommended t3.large</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSHLocation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for SSH acccess</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LensesLocation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for Lenses.io workspace acccess</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS MSK ARN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The Amazon MSK cluster ARN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS MSK Security Group</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The Amazon MSK cluster security Group</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PostgresHostname</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The RDS Endpoint</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PostgresUsername</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The RDS username to connect</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PostgresPassword</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The RDS password to connect</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PostgresDatabase</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The RDS database to connect and create the schemas. Needs to be already created in the RDS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_lenses_io_metrics_to_cloudwatch">Lenses.io metrics to CloudWatch</h3>
-<div class="paragraph">
-<p>Lenses.io exposes in an endpoint metrics in order to be able to monitor the workspace. If you select <strong>yes</strong>
-then the metrics will be exposed in CloudWatch periodically.</p>
-</div>
-<div id="lensesiomonitoring" class="imageblock">
-<div class="content">
-<a class="image" href="images/lensesio_monitoring.png"><img src="images/lensesio_monitoring.png" alt="LensesioMonitoring" width="80%" height="80%"></a>
-</div>
-<div class="title">Figure 6. Example values for cloudformation parameters for Amazon MSK SASL/SCRAM</div>
-</div>
-<div id="lensesiocloudwatch" class="imageblock">
-<div class="content">
-<a class="image" href="images/lensesio_cloudwatch_lags.png"><img src="images/lensesio_cloudwatch_lags.png" alt="lensesioCloudwatch" width="80%" height="80%"></a>
-</div>
-<div class="title">Figure 7. Example of Cloudwatch metrics</div>
 </div>
 <div class="paragraph">
 <p>In the following tables, parameters are listed by category and described separately for the deployment options. When you finish reviewing and customizing the parameters, choose <strong>Next</strong>.</p>
@@ -1507,10 +1264,10 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>Choose <strong>Create stack</strong> to deploy the stack.</p>
 </li>
 <li>
-<p>Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the Lenses.io deployment is ready.</p>
+<p>Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the Lenses deployment is ready.</p>
 </li>
 <li>
-<p>Use the values displayed in the <strong>Outputs</strong> tab for the stack, as shown in <a href="#cfn_outputs">Figure 8</a>, to view the created resources.</p>
+<p>Use the values displayed in the <strong>Outputs</strong> tab for the stack, as shown in <a href="#cfn_outputs">Figure 2</a>, to view the created resources.</p>
 </li>
 </ol>
 </div>
@@ -1518,7 +1275,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="content">
 <a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="cfn_outputs" width="648" height="439"></a>
 </div>
-<div class="title">Figure 8. Lenses.io outputs after successful deployment</div>
+<div class="title">Figure 2. Lenses outputs after successful deployment</div>
 </div>
 </div>
 </div>
@@ -1529,7 +1286,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Copy the URL of the Lenses.io workspace in CloudFormation Outputs as <a href="#outputs1">Figure 9</a> and <a href="#outputs2">Figure 10</a> shows.</p>
+<p>Copy the URL of the Lenses.io workspace in CloudFormation Outputs as <a href="#outputs1">Figure 3</a> and <a href="#outputs2">Figure 4</a> shows.</p>
 </li>
 <li>
 <p>Use the instance ID as the password to login in Lenses.io workspace. Specifically <strong>admin/&lt;ec2-instance-id&gt;</strong></p>
@@ -1540,13 +1297,13 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="content">
 <a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="output" width="80%" height="80%"></a>
 </div>
-<div class="title">Figure 9. Lenses.io Workspace URL</div>
+<div class="title">Figure 3. Lenses.io Workspace URL</div>
 </div>
 <div id="outputs2" class="imageblock">
 <div class="content">
 <a class="image" href="images/instance-name.png"><img src="images/instance-name.png" alt="EC2InstanceIDLensesPassword" width="80%" height="80%"></a>
 </div>
-<div class="title">Figure 10. Lenses.io Password</div>
+<div class="title">Figure 4. Lenses.io Password</div>
 </div>
 </div>
 </div>
@@ -1619,7 +1376,7 @@ and to share your customizations with others.</p>
 </div>
 <hr>
 <div class="paragraph">
-<p>© 2020, Amazon Web Services Inc., or its affiliates, and Lenses.io. All rights reserved.</p>
+<p>© 2020, Amazon Web Services Inc., or its affiliates, and Lenses. All rights reserved.</p>
 </div>
 <div class="sect3">
 <h4 id="_notices">Notices</h4>
@@ -1635,7 +1392,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-17 12:42:56 -0500
+Last updated 2021-05-05 13:52:39 -0500
 </div>
 </div>
 </body>
