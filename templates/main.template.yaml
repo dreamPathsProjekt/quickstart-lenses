@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Deploy Lenses.io with MSK into a new VPC. **WARNING**
-  This template creates Amazon EC2 Windows instances and related resources. You will
+Description: Deploy Lenses with MSK into a new VPC. **WARNING**
+  This template creates Amazon MSK cluster, Amazon EC2 instances and related resources. You will
   be billed for the AWS resources used if you create a stack from this template. (qs-1rrj29p5t)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: Parameters for deploying Lenses.io with MSK into a new VPC
+    EntrypointName: Parameters for deploying Lenses with Amazon MSK cluster into a new VPC
     OptionalParameters:
       - LensesSchemaRegistryURLs
       - LensesConnectURLs
@@ -33,7 +33,6 @@ Metadata:
           default: Lenses Configuration
         Parameters:
           - LensesInstanceType
-          - LensesSSHIngressCIDR
           - LensesWebIngressCIDR
           - LensesStorage
           - LensesSchemaRegistryURLs
@@ -54,8 +53,6 @@ Metadata:
         default: Connect JSON
       LensesInstanceType:
         default: Lenses instance type
-      LensesSSHIngressCIDR:
-        default: The IP address range that can be used to SSH to the Lenses EC2 instances
       LensesSchemaRegistryURLs:
         default: Schema registry JSON
       LensesStorage:
@@ -141,13 +138,6 @@ Parameters:
       - r4.8xlarge
       - r4.16xlarge
     Description: Lenses EC2 instance type
-  LensesSSHIngressCIDR:
-    Type: String
-    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
-    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
-    Description: set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0  to allow all IP addresses access, or another CIDR range.
-    MaxLength: "18"
-    MinLength: "9"
   LensesSchemaRegistryURLs:
     Type: String
     Default: ""
@@ -323,8 +313,11 @@ Resources:
         MSKSecretDecryptionKMSKey: ""
         MSKSecretName: ""
         MSKSecurityGroup: !GetAtt MSKStack.Outputs.MSKSecurityGroupID
-        SSHLocation: !Ref LensesSSHIngressCIDR
         SchemaRegistryURLs: !Ref LensesSchemaRegistryURLs
+        StoragePostgresDatabase: ""
+        StoragePostgresHostname: ""
+        StoragePostgresPassword: ""
+        StoragePostgresUsername: ""
         SubnetId: !GetAtt VPCStack.Outputs.PublicSubnet1ID
         VPC: !GetAtt VPCStack.Outputs.VPCID
       TemplateURL: !Sub
