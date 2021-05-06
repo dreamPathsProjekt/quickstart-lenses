@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Deploy Lenses.io on an AWS EC2 instance into an existing VPC.. **WARNING**
-  This template creates Amazon EC2 Windows instances and related resources. You will
+Description: Deploy Lenses on an AWS EC2 instance into an existing VPC.. **WARNING**
+  This template creates Amazon EC2 instances and related resources. You will
   be billed for the AWS resources used if you create a stack from this template. (qs-1rrj29p8i)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: Parameters for deploying Lenses.io with into an existing VPC
+    EntrypointName: Parameters for deploying Lenses into an existing VPC
     Order: "2"
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -16,7 +16,6 @@ Metadata:
       - Label:
           default: Lenses Network
         Parameters:
-          - SSHLocation
           - LensesLocation
       - Label:
           default: Lenses (Required)
@@ -149,13 +148,6 @@ Parameters:
   MSKSecurityGroup:
     Type: String
     Description: MSK Cluster Security Group ID
-  SSHLocation:
-    Type: String
-    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
-    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
-    Description: set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0  to allow all IP addresses access, or another CIDR range.
-    MaxLength: "18"
-    MinLength: "9"
   SchemaRegistryURLs:
     Type: String
     Description: "Schema Registry Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#schema-registry"
@@ -221,7 +213,7 @@ Resources:
     Properties:
       LogGroupName: !Join
         - "-"
-        - - quickstart-lenses
+        - - quickstart-lensesio
           - "Fn::Select":
               - 4
               - "Fn::Split":
@@ -231,20 +223,17 @@ Resources:
                       - "Fn::Split":
                           - /
                           - Ref: "AWS::StackId"
+      RetentionInDays: 90
   LensesSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: Enable HTTP and SSH access For Lenses
+      GroupName: LensesEc2SecurityGroup
+      GroupDescription: Enable HTTP access For Lenses
       SecurityGroupEgress:
         - CidrIp: "0.0.0.0/0"
           IpProtocol: "-1"
       SecurityGroupIngress:
-        - Description: Access Lenses with SSH
-          CidrIp: !Ref SSHLocation
-          FromPort: 22
-          IpProtocol: tcp
-          ToPort: 22
-        - Description: Access Lenses in Web
+        - Description: Access Lenses on the Web
           CidrIp: !Ref LensesLocation
           FromPort: 9991
           IpProtocol: tcp
@@ -254,7 +243,7 @@ Resources:
           SourceSecurityGroupId: !Ref MSKSecurityGroup
       Tags:
         - Key: Name
-          Value: quickstart-lenses
+          Value: quickstart-lensesio
       VpcId: !Ref VPC
   MSKSecurityIngress:
     Type: "AWS::EC2::SecurityGroupIngress"
@@ -351,7 +340,7 @@ Resources:
                 Resource: "*"
       RoleName: !Join
         - "-"
-        - - quickstart-lenses-ec2
+        - - quickstart-lensesio-ec2
           - "Fn::Select":
               - 4
               - "Fn::Split":
@@ -363,13 +352,13 @@ Resources:
                           - Ref: "AWS::StackId"
       Tags:
         - Key: Name
-          Value: quickstart-lenses
+          Value: quickstart-lensesio
   IAMProfile:
     Type: "AWS::IAM::InstanceProfile"
     Properties:
       InstanceProfileName: !Join
         - "-"
-        - - quickstart-lenses-ec2-iam-profile
+        - - quickstart-lensesio-ec2-iam-profile
           - "Fn::Select":
               - 4
               - "Fn::Split":
@@ -403,7 +392,7 @@ Resources:
       SubnetId: !Ref SubnetId
       Tags:
         - Key: Name
-          Value: quickstart-lenses
+          Value: quickstart-lensesio
       UserData: !Base64
         "Fn::Join":
           - ""

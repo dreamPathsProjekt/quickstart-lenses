@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Deploy an MSK cluster
+Description: Deploys a Amazon MSK cluster in 2 AZs
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -110,10 +110,11 @@ Resources:
   MSKSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: Enable SSH access via port 22
+      GroupName: MSKSecurityGroup
+      GroupDescription: Security Group for MSK cluster
       Tags:
-        - Key: StackName
-          Value: !Ref "AWS::StackName"
+        - Key: Name
+          Value: quickstart-lensesio
       VpcId: !Ref VPCID
   MSKCluster:
     Type: "AWS::MSK::Cluster"
@@ -138,8 +139,14 @@ Resources:
       EnhancedMonitoring: !Ref EnhancedMonitoring
       KafkaVersion: !Ref ApacheKafkaVersion
       NumberOfBrokerNodes: !Ref NumberOfBrokerNodes
+      OpenMonitoring:
+        Prometheus:
+          JmxExporter:
+            EnabledInBroker: true
+          NodeExporter:
+            EnabledInBroker: false
       Tags:
-        StackName: !Ref "AWS::StackName"
+        Name: quickstart-lensesio
 Outputs:
   MSKClusterArn:
     Description: The Arn for the MSKCluster MSK cluster
