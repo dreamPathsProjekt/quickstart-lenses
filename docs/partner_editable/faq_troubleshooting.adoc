@@ -11,7 +11,7 @@ WARNING: When you set *Rollback on failure* to *Disabled*, you continue to incur
 
 For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html[Troubleshooting AWS CloudFormation^] on the AWS website.
 
-*Q.* The stack finished succesfully with *CREATE_COMPLETE* but Lenses.io workspace is not accessible.
+*Q.* The stack finished succesfully with *CREATE_COMPLETE* but Lenses workspace is not accessible.
 
-You can see the logs of Lenses.io workspace in Cloudwatch with the stack name you provided during the deployment. You can SSH in the EC2 machine with EC2 Instance Connect and 
+You can see the logs of Lenses workspace in Cloudwatch with the stack name you provided during the deployment. You can SSH in the EC2 machine with EC2 Instance Connect and 
 your AWS IAM credentials.

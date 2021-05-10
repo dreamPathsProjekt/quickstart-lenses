@@ -880,7 +880,7 @@ collaborated with AWS on the content of the Quick Start.
 <h2 id="_lenses_ec2_msk_on_aws">Lenses EC2 - MSK on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Lenses.io delivers a DataOps developer workspace for real-time applications on any Apache Kafka.
+<p>Lenses delivers a DataOps developer workspace for real-time applications on any Apache Kafka.
 By simplifying how to build, monitor, investigate and secure on modern streaming data technologies such as AWS MSK, engineers can shift their focus to delivering real-time data experiences and get their productivity back.</p>
 </div>
 </div>
@@ -934,10 +934,10 @@ After you deploy the Quick Start, enable the <a href="https://docs.aws.amazon.co
 <div class="content">
 <a class="image" href="images/architecture_diagram.png"><img src="images/architecture_diagram.png" alt="Architecture1" width="80%" height="80%"></a>
 </div>
-<div class="title">Figure 1. Quick Start architecture for Lenses.io on AWS with Managed Streaming Kafka in public or private subnet</div>
+<div class="title">Figure 1. Quick Start architecture for Lenses on AWS with Managed Streaming Kafka in public or private subnet</div>
 </div>
 <div class="paragraph">
-<p>As shown in <a href="#architecture1">Figure 1</a>, this deployment sets up the following, which constitutes the Lenses.io workspace in your AWS account:</p>
+<p>As shown in <a href="#architecture1">Figure 1</a>, this deployment sets up the following, which constitutes the Lenses workspace in your AWS account:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -948,11 +948,11 @@ After you deploy the Quick Start, enable the <a href="https://docs.aws.amazon.co
 <p>An EC2 Instance with your selected instance type.</p>
 </li>
 <li>
-<p>A security group to access the Lenses.io workspace and setup the rule for communicating
+<p>A security group to access the Lenses workspace and setup the rule for communicating
 with Amazon MSK.</p>
 </li>
 <li>
-<p>A Cloudwatch log group where you can see the Lenses.io workspace logs.</p>
+<p>A Cloudwatch log group where you can see the Lenses workspace logs.</p>
 </li>
 <li>
 <p>An Elastic Block Storage (EBS) volume where the data is stored if you select the local storage option (default) when deploying the Quick Start.</p>
@@ -1286,10 +1286,10 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Copy the URL of the Lenses.io workspace in CloudFormation Outputs as <a href="#outputs1">Figure 3</a> and <a href="#outputs2">Figure 4</a> shows.</p>
+<p>Copy the URL of the Lenses workspace in CloudFormation Outputs as <a href="#outputs1">Figure 3</a> and <a href="#outputs2">Figure 4</a> shows.</p>
 </li>
 <li>
-<p>Use the instance ID as the password to login in Lenses.io workspace. Specifically <strong>admin/&lt;ec2-instance-id&gt;</strong></p>
+<p>Use the instance ID as the password to login in Lenses workspace. Specifically <strong>admin/&lt;ec2-instance-id&gt;</strong></p>
 </li>
 </ol>
 </div>
@@ -1297,13 +1297,13 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="content">
 <a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="output" width="80%" height="80%"></a>
 </div>
-<div class="title">Figure 3. Lenses.io Workspace URL</div>
+<div class="title">Figure 3. Lenses Workspace URL</div>
 </div>
 <div id="outputs2" class="imageblock">
 <div class="content">
 <a class="image" href="images/instance-name.png"><img src="images/instance-name.png" alt="EC2InstanceIDLensesPassword" width="80%" height="80%"></a>
 </div>
-<div class="title">Figure 4. Lenses.io Password</div>
+<div class="title">Figure 4. Lenses Password</div>
 </div>
 </div>
 </div>
@@ -1342,10 +1342,10 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <p>For additional information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting AWS CloudFormation</a> on the AWS website.</p>
 </div>
 <div class="paragraph">
-<p><strong>Q.</strong> The stack finished succesfully with <strong>CREATE_COMPLETE</strong> but Lenses.io workspace is not accessible.</p>
+<p><strong>Q.</strong> The stack finished succesfully with <strong>CREATE_COMPLETE</strong> but Lenses workspace is not accessible.</p>
 </div>
 <div class="paragraph">
-<p>You can see the logs of Lenses.io workspace in Cloudwatch with the stack name you provided during the deployment. You can SSH in the EC2 machine with EC2 Instance Connect and
+<p>You can see the logs of Lenses workspace in Cloudwatch with the stack name you provided during the deployment. You can SSH in the EC2 machine with EC2 Instance Connect and
 your AWS IAM credentials.</p>
 </div>
 </div>
