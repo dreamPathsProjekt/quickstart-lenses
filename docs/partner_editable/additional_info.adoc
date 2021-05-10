@@ -3,18 +3,18 @@
 
 == Post-deployment steps
 
-. Copy the URL of the Lenses.io workspace in CloudFormation Outputs shown in <<outputs1>> and <<outputs2>>.
-. Use the instance ID as the password to login in Lenses.io workspace. Specifically *admin/<ec2-instance-id>*
+. Copy the URL of the Lenses workspace in CloudFormation Outputs shown in <<outputs1>> and <<outputs2>>.
+. Use the instance ID as the password to login in Lenses workspace. Specifically *admin/<ec2-instance-id>*
 
 :xrefstyle: short
 [#outputs1]
-.Lenses.io Workspace URL
+.LensesWorkspace URL
 [link=images/cfn_outputs.png]
 image::../images/cfn_outputs.png[output,width=80%,height=80%]
 
 :xrefstyle: short
 [#outputs2]
-.Lenses.io Password
+.Lenses Password
 [link=images/instance-name.png]
 image::../images/instance-name.png[EC2InstanceIDLensesPassword,width=80%,height=80%]
 
