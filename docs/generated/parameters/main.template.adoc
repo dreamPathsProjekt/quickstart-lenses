@@ -1,0 +1,42 @@
+
+.Network Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Availability zones to deploy MSK and Lenses
+(`AvailabilityZones`)|`**__Requires input__**`|List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and only 2 AZs are used for this deployment.|CIDR block of the VPC
+(`VPCCIDR`)|`10.0.0.0/16`|CIDR Block for the VPC|Private subnet 1 CIDR
+(`PrivateSubnet1CIDR`)|`10.0.0.0/19`|CIDR block for private subnet 1 located in Availability Zone 1.|Private subnet 2 CIDR
+(`PrivateSubnet2CIDR`)|`10.0.32.0/19`|CIDR block for private subnet 2 located in Availability Zone 2.|Public subnet 1 CIDR
+(`PublicSubnet1CIDR`)|`10.0.128.0/20`|CIDR Block for the public DMZ subnet 1 located in Availability Zone 1
+|===
+.MSK Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|MSK Apache Kafka version
+(`MSKApacheKafkaVersion`)|`2.6.1`|The Apache Kafka version that on the brokers.|MSK broker type
+(`MSKBrokerType`)|`kafka.m5.large`|The type of a broker determines its compute, memory, and storage capabilities. For information to help you pick a type, see Amazon MSK sizing and pricing|MSK EBS storage volume size
+(`MSKEBSStorageVolumeSize`)|`100`|EBS storage volume per broker in GiB. You can't decrease the storage after the cluster is created.|Number of MSK broker nodes
+(`MSKNumberOfBrokerNodes`)|`2`|The number of broker nodes you want in the Amazon MSK cluster.|MSK encryption within wluster
+(`MSKEncryptionWithinCluster`)|`True`|Encryption within the cluster|MSK encryption in transit
+(`MSKEncryptionInTransit`)|`TLS`|Encryption in transit|MSK enhanced monitoring
+(`MSKEnhancedMonitoring`)|`PER_TOPIC_PER_BROKER`|Specifies the level of monitoring for the MSK cluster.
+|===
+.Lenses Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Lenses instance type
+(`LensesInstanceType`)|`t2.large`|Lenses EC2 instance type|The IP address range that can be used to accees the Lenses EC2 instances over Web
+(`LensesWebIngressCIDR`)|`**__Requires input__**`|set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0 to  allow all IP addresses access, or another CIDR range.|Lenses storage preference
+(`LensesStorage`)|`local`|Storage Mode|Schema registry JSON
+(`LensesSchemaRegistryURLs`)|`**__Blank string__**`|Schema Registry Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#schema-registry|Connect JSON
+(`LensesConnectURLs`)|`**__Blank string__**`|Connect Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect|Lenses CloudWatch metrics
+(`LensesCloudWatchMetrics`)|`No`|Send all consumer metrics of lenses_endpoint/metrics to cloudwatch
+|===
+.AWS Quick Start Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Quick Start S3 bucket name
+(`QSS3BucketName`)|`aws-quickstart`|S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).|Quick Start S3 bucket region
+(`QSS3BucketRegion`)|`us-east-1`|The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.|Quick Start S3 key prefix
+(`QSS3KeyPrefix`)|`quickstart-lenses/`|S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
+|===

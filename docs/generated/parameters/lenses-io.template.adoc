@@ -1,0 +1,57 @@
+
+.Network Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|**NO_LABEL**
+(`VPC`)|`**__Requires input__**`|The VPC that the ECS cluster is deployed to|Subnet ID of VPC
+(`SubnetId`)|`**__Requires input__**`|SubnetId of an existing subnet (for the primary network) in your Virtual Private Cloud (VPC)
+|===
+.Lenses Network
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|**NO_LABEL**
+(`LensesLocation`)|`**__Requires input__**`|set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0 to  allow all IP addresses access, or another CIDR range.
+|===
+.Lenses (Required)
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|**NO_LABEL**
+(`InstanceType`)|`t2.large`|Lenses EC2 instance type
+|===
+.AWS MSK (Required)
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Cluster ARN
+(`MSKClusterARN`)|`**__Requires input__**`|MSK Cluster ARN|Cluster security group
+(`MSKSecurityGroup`)|`**__Requires input__**`|MSK Cluster Security Group ID
+|===
+.AWS MSK SASL/ SCRAM (Optional)
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|MSK associated MSKSecretNameSecret
+(`MSKSecretName`)|`**__Requires input__**`|SASL Scram Secret Name|**NO_LABEL**
+(`MSKSecretDecryptionKMSKey`)|`**__Requires input__**`|The KMS Symetric key that will be used to decrypt the secret
+|===
+.Services (Optional)
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Schema registry JSON (optional)
+(`SchemaRegistryURLs`)|`**__Requires input__**`|Schema Registry Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#schema-registry|Connect JSON (optional)
+(`ConnectURLs`)|`**__Requires input__**`|Connect Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect
+|===
+.Monitoring
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Cloudwatch metrics
+(`CloudWatchMetrics`)|`No`|Send all consumer metrics of lenses_endpoint/metrics to cloudwatch
+|===
+.Lenses Storage
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Lenses storage Type
+(`LensesStorage`)|`local`|Storage Mode|Postgres hostname
+(`StoragePostgresHostname`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Hostname|Postgres username
+(`StoragePostgresUsername`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Username|Postgres password
+(`StoragePostgresPassword`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Password|Postgres Database
+(`StoragePostgresDatabase`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Database Name
+|===
