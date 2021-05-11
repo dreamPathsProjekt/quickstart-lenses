@@ -213,7 +213,7 @@ Resources:
     Properties:
       LogGroupName: !Join
         - "-"
-        - - quickstart-lensesio
+        - - quickstart-lenses
           - "Fn::Select":
               - 4
               - "Fn::Split":
@@ -243,7 +243,7 @@ Resources:
           SourceSecurityGroupId: !Ref MSKSecurityGroup
       Tags:
         - Key: Name
-          Value: quickstart-lensesio
+          Value: quickstart-lenses
       VpcId: !Ref VPC
   MSKSecurityIngress:
     Type: "AWS::EC2::SecurityGroupIngress"
@@ -340,7 +340,7 @@ Resources:
                 Resource: "*"
       RoleName: !Join
         - "-"
-        - - quickstart-lensesio-ec2
+        - - quickstart-lenses-ec2
           - "Fn::Select":
               - 4
               - "Fn::Split":
@@ -352,13 +352,13 @@ Resources:
                           - Ref: "AWS::StackId"
       Tags:
         - Key: Name
-          Value: quickstart-lensesio
+          Value: quickstart-lenses
   IAMProfile:
     Type: "AWS::IAM::InstanceProfile"
     Properties:
       InstanceProfileName: !Join
         - "-"
-        - - quickstart-lensesio-ec2-iam-profile
+        - - quickstart-lenses-ec2-iam-profile
           - "Fn::Select":
               - 4
               - "Fn::Split":
@@ -392,7 +392,7 @@ Resources:
       SubnetId: !Ref SubnetId
       Tags:
         - Key: Name
-          Value: quickstart-lensesio
+          Value: quickstart-lenses
       UserData: !Base64
         "Fn::Join":
           - ""

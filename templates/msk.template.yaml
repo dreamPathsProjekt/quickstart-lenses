@@ -114,7 +114,7 @@ Resources:
       GroupDescription: Security Group for MSK cluster
       Tags:
         - Key: Name
-          Value: quickstart-lensesio
+          Value: quickstart-lenses
       VpcId: !Ref VPCID
   MSKCluster:
     Type: "AWS::MSK::Cluster"
@@ -146,7 +146,7 @@ Resources:
           NodeExporter:
             EnabledInBroker: false
       Tags:
-        Name: quickstart-lensesio
+        Name: quickstart-lenses
 Outputs:
   MSKClusterArn:
     Description: The Arn for the MSKCluster MSK cluster
