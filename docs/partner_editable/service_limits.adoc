@@ -4,7 +4,7 @@
 
 // Space needed to maintain table headers
 |VPCs |1
-|Elastic Block Store volume |1
+|Elastic Block Store volumes |1
 |Security groups |1
 |AWS Identity and Access Management (IAM) roles |1
 |EC2 instances |1
