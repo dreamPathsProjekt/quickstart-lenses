@@ -2,5 +2,5 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-Lenses delivers a DataOps developer workspace for real-time applications on any Apache Kafka.
-By simplifying how to build, monitor, investigate and secure on modern streaming data technologies such as AWS MSK, engineers can shift their focus to delivering real-time data experiences and get their productivity back.
+This Quick Start sets up Lenses.io in a VPC and connects it to an AWS Managed Apache Kafka cluster. Lenses.io is a streaming data management service for Apache Kafka. It provides a web user interface to explore Kafka topics and enterprise features to query and inspect Kafka data streams. Amazon MSK is a managed AWS service that helps you build and run production applications on Apache Kafka without needing Apache Kafka infrastructure management expertise. Your Kafka clusters run in an Amazon VPC managed by Amazon MSK, which continuously monitors server health and automatically replaces servers when they fail. The Quick Start deployment uses Amazon EBS for storage. Data stored on EBS is persisted in the case of instance failure or termination.
+

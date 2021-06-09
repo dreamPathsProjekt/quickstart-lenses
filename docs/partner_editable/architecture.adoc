@@ -11,7 +11,7 @@ image::../images/architecture_diagram.png[Architecture1,width=80%,height=80%]
 As shown in <<architecture1>>, this deployment sets up the following, which constitutes the Lenses workspace in your AWS account:
 
 * A Managed Streaming for Apache Kafka (MSK) cluster.
-* An EC2 Instance with your selected instance type.
+* An Amazon Elastic Compute Cloud (Amazon EC2) instance in  Instance with your selected instance type.
 * A security group to access the Lenses workspace and setup the rule for communicating
 with Amazon MSK.
 * A Cloudwatch log group where you can see the Lenses workspace logs.
