@@ -12,4 +12,4 @@
 :production_build:
 :marketplace_subscription:
 :marketplace_listing_url: https://aws.amazon.com/marketplace/pp/B08BZGFSKY
-:parameters-as-appendix:
+:parameters_as_appendix:
