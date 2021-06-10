@@ -4,7 +4,7 @@ Description: Deploy Lenses with MSK into a new VPC. **WARNING**
   be billed for the AWS resources used if you create a stack from this template. (qs-1rrj29p5t)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: Parameters for deploying Lenses with Amazon MSK cluster into a new VPC
+    EntrypointName: Launch into a new VPC
     OptionalParameters:
       - LensesSchemaRegistryURLs
       - LensesConnectURLs
@@ -12,7 +12,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Network Configuration
+          default: Network configuration
         Parameters:
           - AvailabilityZones
           - VPCCIDR
@@ -20,7 +20,7 @@ Metadata:
           - PrivateSubnet2CIDR
           - PublicSubnet1CIDR
       - Label:
-          default: MSK Configuration
+          default: AWS MSK configuration
         Parameters:
           - MSKApacheKafkaVersion
           - MSKBrokerType
@@ -30,7 +30,7 @@ Metadata:
           - MSKEncryptionInTransit
           - MSKEnhancedMonitoring
       - Label:
-          default: Lenses Configuration
+          default: Lenses configuration
         Parameters:
           - LensesInstanceType
           - LensesWebIngressCIDR
@@ -39,14 +39,14 @@ Metadata:
           - LensesConnectURLs
           - LensesCloudWatchMetrics
       - Label:
-          default: AWS Quick Start Configuration
+          default: Quick Start configuration
         Parameters:
           - QSS3BucketName
           - QSS3BucketRegion
           - QSS3KeyPrefix
     ParameterLabels:
       AvailabilityZones:
-        default: Availability zones to deploy MSK and Lenses
+        default: Availability zones to deploy AWS MSK and Lenses
       LensesCloudWatchMetrics:
         default: Lenses CloudWatch metrics
       LensesConnectURLs:
@@ -58,21 +58,21 @@ Metadata:
       LensesStorage:
         default: Lenses storage preference
       LensesWebIngressCIDR:
-        default: The IP address range that can be used to accees the Lenses EC2 instances over Web
+        default: Inbound traffic CIDR address ranges
       MSKApacheKafkaVersion:
-        default: MSK Apache Kafka version
+        default: AWS MSK Apache Kafka version
       MSKBrokerType:
-        default: MSK broker type
+        default: AWS MSK broker type
       MSKEBSStorageVolumeSize:
-        default: MSK EBS storage volume size
+        default: AWS MSK EBS storage volume size
       MSKEncryptionInTransit:
-        default: MSK encryption in transit
+        default: AWS MSK encryption in transit
       MSKEncryptionWithinCluster:
-        default: MSK encryption within wluster
+        default: AWS MSK encryption within cluster
       MSKEnhancedMonitoring:
-        default: MSK enhanced monitoring
+        default: AWS MSK enhanced monitoring
       MSKNumberOfBrokerNodes:
-        default: Number of MSK broker nodes
+        default: Number of AWS MSK broker nodes
       PrivateSubnet1CIDR:
         default: Private subnet 1 CIDR
       PrivateSubnet2CIDR:
@@ -82,7 +82,7 @@ Metadata:
       QSS3BucketName:
         default: Quick Start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 bucket region
+        default: Quick Start S3 bucket Region
       QSS3KeyPrefix:
         default: Quick Start S3 key prefix
       VPCCIDR:
@@ -90,7 +90,7 @@ Metadata:
 Parameters:
   AvailabilityZones:
     Type: "List<AWS::EC2::AvailabilityZone::Name>"
-    Description: "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and only 2 AZs are used for this deployment."
+    Description: List of Availability Zones to use for the subnets in the VPC.
   LensesCloudWatchMetrics:
     Type: String
     Default: "No"

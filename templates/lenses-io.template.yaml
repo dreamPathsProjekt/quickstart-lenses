@@ -154,15 +154,15 @@ Parameters:
   StoragePostgresDatabase:
     Type: String
     Default: ""
-    Description: PostgreSQL database name. Required if storage is PostgreSQL.
+    Description: If storage is PostgreSQL, enter the database name.
   StoragePostgresHostname:
     Type: String
     Default: ""
-    Description: PostgreSQL hostname. Required if storage is PostgreSQL.
+    Description: If storage is PostgreSQL, enter the hostname.
   StoragePostgresPassword:
     Type: String
     Default: ""
-    Description: PostgreSQL password. Required if storage is PostgreSQL.
+    Description: If storage is PostgreSQL, enter the password.
     NoEcho: "true"
   StoragePostgresUsername:
     Type: String
