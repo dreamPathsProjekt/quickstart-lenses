@@ -2,16 +2,16 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-This Quick Start deploys an Apache Kafka environment, managed by Amazon Managed Streaming Service for Apache Kafka (Amazon MSK), connected to a Lenses.io workspace running on an Amazon Elastic Compute Cloud (Amazon EC2) instance. Lenses.io provides monitoring, governance, and self-service administration of a Kafka environment. Amazon MSK is a managed AWS service that helps you build and run Apache Kafka applications to process streaming data without needing to manage infrastructure. Your Kafka clusters run in an Amazon virtual private cloud (VPC) managed by Amazon MSK, which continuously monitors server health and automatically replaces servers when they fail. EBS, CloudWatch, AWS KMS???
+This Quick Start deploys Lenses.io on an Amazon Elastic Compute Cloud (Amazon EC2) instance connected to Amazon Managed Streaming Service for Apache Kafka (Amazon MSK). Lenses.io provides monitoring, governance, and self-service administration of a Kafka environment. Amazon MSK helps you build and run Apache Kafka data streaming applications without managing infrastructure. Your Kafka clusters run in an Amazon virtual private cloud (VPC) managed by Amazon MSK, which continuously monitors server health and automatically replaces servers when they fail.    EBS, CloudWatch, AWS KMS???
 
-By automatically configuring the included AWS services, this Quick Start helps you address streaming use cases, for example:
+By automatically configuring the included AWS services, this Quick Start helps you address streaming use cases such as:
 
-* Capture high volume application log files
-* Analyze website clickstreams
-* Process database event streams
-* Track financial transactions
-* Aggregate social media feeds
-* Collect IT log files
-* Continuously deliver to a data lake
+* Capturing high volume application log files
+* Analyzing website clickstreams
+* Processing database event streams
+* Tracking financial transactions
+* Aggregating social media feeds
+* Collecting IT log files
+* Continuously delivering to a data lake
 
 
