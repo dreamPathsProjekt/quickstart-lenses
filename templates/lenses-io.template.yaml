@@ -54,7 +54,7 @@ Metadata:
       ConnectURLs:
         default: Connect JSON (optional)
       LensesStorage:
-        default: Lenses storage yype
+        default: Lenses storage type
       MSKClusterARN:
         default: Cluster ARN
       MSKSecretDecryptionKMSKey:
