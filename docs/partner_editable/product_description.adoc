@@ -2,9 +2,9 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-The {partner-product-short-name} Quick Start deploys an Amazon EC2 instance to run Lenses.io and connects it to Amazon MSK. Lenses.io is a streaming data management service for Apache Kafka. It provides data observability, productivity, monitoring, security, and governance for Apache Kafka and event/streaming applications. Amazon MSK is a managed AWS service that helps you build and run Apache Kafka applications to process streaming data without needing to manage infrastructure. Your Kafka clusters run in an Amazon VPC managed by Amazon MSK, which continuously monitors server health and automatically replaces servers when they fail. 
+This Quick Start deploys an Apache Kafka environment, managed by Amazon Managed Streaming Service for Apache Kafka (Amazon MSK), connected to a Lenses.io workspace running on an Amazon Elastic Compute Cloud (Amazon EC2) instance. Lenses.io provides monitoring, governance, and self-service administration of a Kafka environment. Amazon MSK is a managed AWS service that helps you build and run Apache Kafka applications to process streaming data without needing to manage infrastructure. Your Kafka clusters run in an Amazon virtual private cloud (VPC) managed by Amazon MSK, which continuously monitors server health and automatically replaces servers when they fail. EBS, CloudWatch, AWS KMS???
 
-By automatically configuring the included AWS services, this Quick Start helps you address real-time streaming use cases, for example:
+By automatically configuring the included AWS services, this Quick Start helps you address streaming use cases, for example:
 
 * Capture high volume application log files
 * Analyze website clickstreams
