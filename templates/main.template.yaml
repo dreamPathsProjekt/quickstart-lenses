@@ -186,7 +186,7 @@ Parameters:
   MSKEBSStorageVolumeSize:
     Type: Number
     Default: 100
-    Description: EBS storage volume per broker, in GiB. *Note:* Once you create the cluster, you can not decrease the storage volume.
+    Description: EBS storage volume per broker, in GiB. *Note:* After you create the cluster, you can not decrease the storage volume.
     MaxValue: 16384
     MinValue: 1
   MSKEncryptionInTransit:
