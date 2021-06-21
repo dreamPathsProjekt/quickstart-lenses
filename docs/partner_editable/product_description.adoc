@@ -2,16 +2,8 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-This Quick Start deploys Lenses on an Amazon Elastic Compute Cloud (Amazon EC2) instance connected to Amazon Managed Streaming Service for Apache Kafka (Amazon MSK). Amazon MSK helps you build and run data streaming applications with Apache Kafka without managing infrastructure. Your Kafka clusters run in an Amazon virtual private cloud (VPC) managed by Amazon MSK, which continuously monitors server health and automatically replaces servers when they fail. Lenses provides DataOps monitoring, governance, and self-service administration over this Kafka distribution. The Lenses Amazon EC2 instance is attached to an Amazon Elastic Block Storage (Amazon EBS) volume for high availability, persistence, and encryption of data. When you deploy the Quick Start, you can choose to enable Amazon CloudWatch logs to collect and track metrics on your Lenses instance. 
+This Quick Start deploys Lenses on an Amazon Elastic Compute Cloud (Amazon EC2) instance connected to Amazon Managed Streaming Service for Apache Kafka (Amazon MSK). Lenses provides features for Kafka monitoring, governance, and self-service administration available over web, command line interface, and API endpoints. Amazon MSK helps you run Kafka data streaming applications on the Amazon Web Services (AWS) Cloud without managing infrastructure. Kafka clusters run in a virtual private cloud (VPC) and are managed by Amazon MSK. 
 
-By automatically configuring the included AWS services, this Quick Start helps you address streaming use cases such as:
-
-* Capturing high volume application log files
-* Analyzing website clickstreams
-* Processing database event streams
-* Tracking financial transactions
-* Aggregating social media feeds
-* Collecting IT log files
-* Continuously delivering to a data lake
+The Lenses Amazon EC2 instance is attached to an Amazon Elastic Block Storage (Amazon EBS) volume for high availability, persistence, and data encryption. When you deploy the Quick Start, you can choose to enable Amazon CloudWatch logs to collect and track metrics on your Lenses instance.
 
 
