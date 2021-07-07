@@ -2,7 +2,7 @@
 :partner-product-name: Lenses EC2 - MSK
 :partner-company-name: Lenses
 :partner-product-short-name: Lenses
-:doc-month: June
+:doc-month: July
 :doc-year: 2021
 :partner-contributors: Spiros Economakis, Lenses
 :aws-contributors: Siva Sadhu, Partner SA Team - EMEA ISVs
