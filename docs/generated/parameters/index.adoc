@@ -1,6 +1,6 @@
 
-=== Parameters for deploying Lenses with Amazon MSK cluster into a new VPC
+=== Launch into a new VPC
 include::main.template.adoc[]
 
-=== Parameters for deploying Lenses into an existing VPC
+=== Launch into an existing VPC
 include::lenses-io.template.adoc[]
