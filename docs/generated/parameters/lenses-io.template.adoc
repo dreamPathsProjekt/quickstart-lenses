@@ -1,57 +1,57 @@
 
-.Network Configuration
+.Network configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|**NO_LABEL**
-(`VPC`)|`**__Requires input__**`|The VPC that the ECS cluster is deployed to|Subnet ID of VPC
-(`SubnetId`)|`**__Requires input__**`|SubnetId of an existing subnet (for the primary network) in your Virtual Private Cloud (VPC)
+(`VPC`)|`**__Requires input__**`|The VPC to which the Amazon MSK cluster is deployed.|Subnet ID of VPC
+(`SubnetId`)|`**__Requires input__**`|Subnet ID of an existing subnet (for the primary network) in your VPC.
 |===
-.Lenses Network
+.Lenses network
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|**NO_LABEL**
-(`LensesLocation`)|`**__Requires input__**`|set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0 to  allow all IP addresses access, or another CIDR range.
+(`LensesLocation`)|`**__Requires input__**`|Enter the inbound IP address range in CIDR format `x.x.x.x/x`. *Note:* To allow one specific IP address, set to `x.x.x.x/32`. To allow all IP addresses, enter `0.0.0.0/0`.
 |===
-.Lenses (Required)
+.Lenses (required)
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|**NO_LABEL**
-(`InstanceType`)|`t2.large`|Lenses EC2 instance type
+(`InstanceType`)|`t2.large`|Lenses EC2 instance type.
 |===
-.AWS MSK (Required)
+.Amazon MSK (required)
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Cluster ARN
-(`MSKClusterARN`)|`**__Requires input__**`|MSK Cluster ARN|Cluster security group
-(`MSKSecurityGroup`)|`**__Requires input__**`|MSK Cluster Security Group ID
+(`MSKClusterARN`)|`**__Requires input__**`|MSK cluster Amazon Resource Name (ARN).|Cluster security group
+(`MSKSecurityGroup`)|`**__Requires input__**`|MSK cluster security group ID.
 |===
-.AWS MSK SASL/ SCRAM (Optional)
+.Amazon MSK SASL/ SCRAM (optional)
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|MSK associated MSKSecretNameSecret
-(`MSKSecretName`)|`**__Requires input__**`|SASL Scram Secret Name|**NO_LABEL**
-(`MSKSecretDecryptionKMSKey`)|`**__Requires input__**`|The KMS Symetric key that will be used to decrypt the secret
+(`MSKSecretName`)|`**__Requires input__**`|SASL/SCRAM secret name.|**NO_LABEL**
+(`MSKSecretDecryptionKMSKey`)|`**__Requires input__**`|The AWS Key Management Service (AWS KMS) symmetric customer master key (CMK) used to decrypt the secret.
 |===
-.Services (Optional)
+.Services (optional)
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Schema registry JSON (optional)
-(`SchemaRegistryURLs`)|`**__Requires input__**`|Schema Registry Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#schema-registry|Connect JSON (optional)
-(`ConnectURLs`)|`**__Requires input__**`|Connect Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect
+(`SchemaRegistryURLs`)|`**__Requires input__**`|Schema registry nodes. For more information, see https://docs.lenses.io/4.1/configuration/schema-registry/[Schema Registry^].|Connect JSON (optional)
+(`ConnectURLs`)|`**__Requires input__**`|Connect nodes. For more information, see https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect"
 |===
 .Monitoring
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Cloudwatch metrics
-(`CloudWatchMetrics`)|`No`|Send all consumer metrics of lenses_endpoint/metrics to cloudwatch
+(`CloudWatchMetrics`)|`No`|Select *Yes* to forward Lenses metrics to CloudWatch.
 |===
-.Lenses Storage
+.Lenses storage
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
-|Parameter label (name) |Default value|Description|Lenses storage Type
-(`LensesStorage`)|`local`|Storage Mode|Postgres hostname
-(`StoragePostgresHostname`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Hostname|Postgres username
-(`StoragePostgresUsername`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Username|Postgres password
-(`StoragePostgresPassword`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Password|Postgres Database
-(`StoragePostgresDatabase`)|`**__Blank string__**`|(Required if storage is postgres) Postgres Database Name
+|Parameter label (name) |Default value|Description|Lenses storage type
+(`LensesStorage`)|`local`|Storage mode.|Postgres hostname
+(`StoragePostgresHostname`)|`**__Blank string__**`|If storage is PostgreSQL, enter the hostname.|Postgres username
+(`StoragePostgresUsername`)|`**__Blank string__**`|PostgreSQL username. Required if storage is PostgreSQL.|Postgres password
+(`StoragePostgresPassword`)|`**__Blank string__**`|If storage is PostgreSQL, enter the password.|Postgres database
+(`StoragePostgresDatabase`)|`**__Blank string__**`|If storage is PostgreSQL, enter the database name.
 |===
