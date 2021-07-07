@@ -1,6 +1,7 @@
 // Replace the content in <>
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
+This Quick Start deploys Lenses on an Amazon Elastic Compute Cloud (Amazon EC2) instance connected to Amazon Managed Streaming Service for Apache Kafka (Amazon MSK). Lenses is an application and data operations workspace for Apache Kafka. It provides a web interface and features for developer self-service, data observability, and monitoring of Kafka topologies. Amazon MSK provisions and runs Kafka clusters so you can build streaming data applications on the Amazon Web Services (AWS) Cloud without managing infrastructure. 
 
-Lenses delivers a DataOps developer workspace for real-time applications on any Apache Kafka.
-By simplifying how to build, monitor, investigate and secure on modern streaming data technologies such as AWS MSK, engineers can shift their focus to delivering real-time data experiences and get their productivity back.
+During deployment, you can choose Amazon Elastic Block Storage (Amazon EBS) or an Amazon Relational Database Storage (Amazon RDS) PostgreSQL database instance for storage. You also can choose to enable Amazon CloudWatch logs to collect and track https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html[metrics^] on the Lenses EC2 instance.
+

@@ -4,15 +4,14 @@
 
 :xrefstyle: short
 [#architecture1]
-.Quick Start architecture for Lenses on AWS with Managed Streaming Kafka in public or private subnet
+.Quick Start architecture for Lenses on AWS with Managed Streaming Kafka
 [link=images/architecture_diagram.png]
-image::../images/architecture_diagram.png[Architecture1,width=80%,height=80%]
+image::../images/lenses-architecture.png[Architecture1,width=100%,height=100%]
 
 As shown in <<architecture1>>, this deployment sets up the following, which constitutes the Lenses workspace in your AWS account:
 
-* A Managed Streaming for Apache Kafka (MSK) cluster.
-* An EC2 Instance with your selected instance type.
-* A security group to access the Lenses workspace and setup the rule for communicating
-with Amazon MSK.
-* A Cloudwatch log group where you can see the Lenses workspace logs.
-* An Elastic Block Storage (EBS) volume where the data is stored if you select the local storage option (default) when deploying the Quick Start.
+* Lenses deployed on an Amazon Elastic Compute Container (Amazon EC2) instance.
+* A security group to control access to the Lenses EC2 instance and communication between the Lenses EC2 instance and Amazon Managed Streaming for Apache Kafka (Amazon MSK).
+* Amazon MSK to provision and manage a Kafka cluster.
+* If the local storage option is chosen during deployment, an Amazon Elastic Block Store (Amazon EBS) volume is provisioned for storage (shown). You can also choose to connect to an existing Amazon RDS PostgreSQL database instance.
+* If Amazon CloudWatch metrics is chosen during deployment, an Amazon CloudWatch log group is launched to collect and retain metrics on the Lenses EC2 instance (shown).

@@ -1,0 +1,42 @@
+
+.Network configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Availability zones
+(`AvailabilityZones`)|`**__Requires input__**`|List of Availability Zones to use for the subnets in the VPC.|CIDR block of the VPC
+(`VPCCIDR`)|`10.0.0.0/16`|CIDR Block for the VPC.|Private subnet 1 CIDR
+(`PrivateSubnet1CIDR`)|`10.0.0.0/19`|CIDR block for private subnet 1, located in Availability Zone 1.|Private subnet 2 CIDR
+(`PrivateSubnet2CIDR`)|`10.0.32.0/19`|CIDR block for private subnet 2, located in Availability Zone 2.|Public subnet 1 CIDR
+(`PublicSubnet1CIDR`)|`10.0.128.0/20`|CIDR Block for the public DMZ subnet 1, located in Availability Zone 1
+|===
+.Amazon MSK configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Amazon MSK Apache Kafka version
+(`MSKApacheKafkaVersion`)|`2.6.1`|Apache Kafka version on the broker nodes.|Amazon MSK broker type
+(`MSKBrokerType`)|`kafka.m5.large`|Select a Amazon MSK broker type. For more information, see https://aws.amazon.com/msk/pricing/[Amazon MSK pricing].|Amazon MSK EBS storage volume size
+(`MSKEBSStorageVolumeSize`)|`100`|EBS storage volume per broker, in GiB. *Note:* After you create the cluster, you can not decrease the storage volume.|Number of Amazon MSK broker nodes
+(`MSKNumberOfBrokerNodes`)|`2`|The number of broker nodes you want in the Amazon MSK cluster.|Amazon MSK encryption within cluster
+(`MSKEncryptionWithinCluster`)|`True`|Encryption within the cluster|Amazon MSK encryption in transit
+(`MSKEncryptionInTransit`)|`TLS`|Encryption in transit|Amazon MSK enhanced monitoring
+(`MSKEnhancedMonitoring`)|`PER_TOPIC_PER_BROKER`|Specifies the level of monitoring for the MSK cluster.
+|===
+.Lenses configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Lenses instance type
+(`LensesInstanceType`)|`t2.large`|Lenses EC2 instance type. For more information, see https://aws.amazon.com/ec2/instance-types/[Amazon EC2 Instance Types^].|Inbound traffic CIDR address range
+(`LensesWebIngressCIDR`)|`**__Requires input__**`|Enter the inbound IP address range in CIDR format `x.x.x.x/x`. *Note:* To allow one specific IP address, set to `x.x.x.x/32`. To allow all IP addresses, enter `0.0.0.0/0`.|Lenses storage preference
+(`LensesStorage`)|`local`|Storage mode.|Schema registry JSON
+(`LensesSchemaRegistryURLs`)|`**__Blank string__**`|URLs for Schema Registry instances that can be used to register or look up schemas. For more information, see https://docs.lenses.io/4.1/configuration/schema-registry/[Schema Registry^].|Connect JSON
+(`LensesConnectURLs`)|`**__Blank string__**`|Connect Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect|Lenses CloudWatch metrics
+(`LensesCloudWatchMetrics`)|`No`|Select *Yes* to forward Lenses metrics to CloudWatch.
+|===
+.Quick Start configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Quick Start S3 bucket name
+(`QSS3BucketName`)|`aws-quickstart`|Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See https://aws-quickstart.github.io/option1.html.|Quick Start S3 bucket Region
+(`QSS3BucketRegion`)|`us-east-1`|AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See https://aws-quickstart.github.io/option1.html.|Quick Start S3 key prefix
+(`QSS3KeyPrefix`)|`quickstart-lenses/`|S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). End with a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html and https://aws-quickstart.github.io/option1.html.
+|===
