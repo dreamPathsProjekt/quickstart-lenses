@@ -4,7 +4,7 @@
 == Post-deployment steps
 === Lenses workspace URL and login credentials
 :xrefstyle: short
-Find the URL and password of the Lenses workspace in the https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/[AWS CloudFormation console]. 
+To log in to the Lenses workspace, use `admin` as the user name. The URL of the Lenses workspace and the password can be found in the https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/[AWS CloudFormation console]. 
 
 * URL
 +
@@ -24,10 +24,6 @@ On the *Resources* tab, find the password in the *Physical ID* column of *Logica
 .Lenses password
 [link=images/instance-name.png]
 image::../images/instance-name.png[EC2InstanceIDLensesPassword,width=80%,height=80%]
-
-* User name
-+
-Use `admin` as the user name.
 
 
 == Security

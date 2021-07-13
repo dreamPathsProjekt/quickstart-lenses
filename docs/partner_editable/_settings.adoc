@@ -1,5 +1,5 @@
 :quickstart-project-name: quickstart-lensesio
-:partner-product-name: Lenses EC2 - MSK
+:partner-product-name: Lenses on Amazon EC2 for Amazon MSK
 :partner-company-name: Lenses
 :partner-product-short-name: Lenses
 :doc-month: July
