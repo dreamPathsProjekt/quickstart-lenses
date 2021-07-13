@@ -3,8 +3,8 @@
 |Resource |This deployment uses
 
 // Space needed to maintain table headers
-|VPCs |1
-|Elastic Block Store volume |1
+|Virtual private clouds (VPCs) |1
+|EBS volumes |1
 |Security groups |1
 |AWS Identity and Access Management (IAM) roles |1
 |EC2 instances |1

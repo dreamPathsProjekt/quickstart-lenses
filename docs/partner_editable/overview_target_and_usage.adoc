@@ -2,6 +2,6 @@
 // Identify your target audience and explain how/why they would use this Quick Start.
 //Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
 
-This guide provides instructions for deploying the {partner-product-short-name} Quick Start reference architecture on the AWS Cloud.
+This Quick Start guide describes architectural considerations and configuration steps for deploying {partner-product-short-name} in the Amazon Web Services (AWS) Cloud. It includes links to AWS CloudFormation templates that launch and configure the AWS services required to deploy this Quick Start using AWS best practices for security and availability.
 
-This Quick Start is for engineers who want to discover, observe, and share streaming data.
+The guide is intended for IT architects, developers, and DevOps professionals who want to discover, observe, and share streaming data in the AWS Cloud.

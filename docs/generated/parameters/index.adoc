@@ -1,1 +1,6 @@
-// placeholder
+
+=== Launch into a new VPC
+include::main.template.adoc[]
+
+=== Launch into an existing VPC
+include::lenses-io.template.adoc[]

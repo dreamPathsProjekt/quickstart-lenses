@@ -1,6 +1,8 @@
 // Replace the content in <>
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
+Amazon Managed Streaming Service for Apache Kafka (Amazon MSK) manages your Apache Kafka infrastructure so you can pivot from administration to building streaming applications. Lenses adds a DataOps layer to Kafka with features for developer self-service, data observability, and monitoring. This Quick Start combines the security and infrastructure management of Amazon MSK with the full-service visibility of a Lenses web interface.
 
-Lenses delivers a DataOps developer workspace for real-time applications on any Apache Kafka.
-By simplifying how to build, monitor, investigate and secure on modern streaming data technologies such as AWS MSK, engineers can shift their focus to delivering real-time data experiences and get their productivity back.
+Lenses launches in a security group on an Amazon Elastic Compute Cloud (Amazon EC2) instance. Developers access the Lenses dashboard to view and control data and applications running in the Amazon MSK Kafka infrastructure. In Lenses, they can set up cluster monitoring to receive alerts in Amazon CloudWatch when incidents occur such as offline or under-replicated partitions. Lenses offers broad access to partitions, topics, and data flows, and the ability to query data with Structured Query Language (SQL).
+
+

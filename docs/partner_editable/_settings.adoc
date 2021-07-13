@@ -1,13 +1,15 @@
 :quickstart-project-name: quickstart-lensesio
-:partner-product-name: Lenses EC2 - MSK
+:partner-product-name: Lenses on Amazon EC2 for Amazon MSK
 :partner-company-name: Lenses
 :partner-product-short-name: Lenses
-:doc-month: March
+:doc-month: July
 :doc-year: 2021
 :partner-contributors: Spiros Economakis, Lenses
-:quickstart-contributors: Siva Sadhu and Dave May, AWS
+:aws-contributors: Siva Sadhu, Partner SA Team - EMEA ISVs
+:quickstart-contributors: Dave May, AWS Quick Start team
 :deployment_time: 40 minutes
 :default_deployment_region: us-east-1
 :production_build:
 :marketplace_subscription:
 :marketplace_listing_url: https://aws.amazon.com/marketplace/pp/B08BZGFSKY
+:parameters_as_appendix:
