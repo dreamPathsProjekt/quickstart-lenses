@@ -1,7 +1,8 @@
 // Replace the content in <>
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
-Lenses adds a DataOps layer to Apache Kafka deployments with features for developer self-service, data observability, and monitoring. This Quick Start deploys a Lenses workspace connected to Amazon Managed Streaming Service for Apache Kafka (Amazon MSK). Amazon MSK provisions and runs Kafka clusters so you can build streaming data applications on the Amazon Web Services (AWS) Cloud without managing infrastructure.
+Amazon Managed Streaming Service for Apache Kafka (Amazon MSK) manages your Apache Kafka infrastructure so you can pivot from administration to building streaming applications. Lenses adds a DataOps layer to Kafka with features for developer self-service, data observability, and monitoring. This Quick Start combines the security and infrastructure management of Amazon MSK with the full-service visibility of a Lenses web interface.
 
-This Quick Start launches Lenses in a security group on an Amazon Elastic Compute Cloud (Amazon EC2) instance. Developers access the Lenses dashboard to view data and applications running in the Amazon MSK Kafka infrastructure. In Lenses, they can set up cluster monitoring to receive alerts in Amazon CloudWatch when incidents occur such as offline or under-replicated partitions. Lenses offers broad access to partitions, topics, and data flows, and the ability to query data with Structured Query Language (SQL).
+Lenses launches in a security group on an Amazon Elastic Compute Cloud (Amazon EC2) instance. Developers access the Lenses dashboard to view and control data and applications running in the Amazon MSK Kafka infrastructure. In Lenses, they can set up cluster monitoring to receive alerts in Amazon CloudWatch when incidents occur such as offline or under-replicated partitions. Lenses offers broad access to partitions, topics, and data flows, and the ability to query data with Structured Query Language (SQL).
+
 
