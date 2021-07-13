@@ -4,7 +4,7 @@ Description: Deploy Lenses with MSK into a new VPC. **WARNING**
   be billed for the AWS resources used if you create a stack from this template. (qs-1rrj29p5t)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: Parameters for deploying Lenses with Amazon MSK cluster into a new VPC
+    EntrypointName: Launch into a new VPC
     OptionalParameters:
       - LensesSchemaRegistryURLs
       - LensesConnectURLs
@@ -12,7 +12,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Network Configuration
+          default: Network configuration
         Parameters:
           - AvailabilityZones
           - VPCCIDR
@@ -20,7 +20,7 @@ Metadata:
           - PrivateSubnet2CIDR
           - PublicSubnet1CIDR
       - Label:
-          default: MSK Configuration
+          default: Amazon MSK configuration
         Parameters:
           - MSKApacheKafkaVersion
           - MSKBrokerType
@@ -30,7 +30,7 @@ Metadata:
           - MSKEncryptionInTransit
           - MSKEnhancedMonitoring
       - Label:
-          default: Lenses Configuration
+          default: Lenses configuration
         Parameters:
           - LensesInstanceType
           - LensesWebIngressCIDR
@@ -39,14 +39,14 @@ Metadata:
           - LensesConnectURLs
           - LensesCloudWatchMetrics
       - Label:
-          default: AWS Quick Start Configuration
+          default: Quick Start configuration
         Parameters:
           - QSS3BucketName
           - QSS3BucketRegion
           - QSS3KeyPrefix
     ParameterLabels:
       AvailabilityZones:
-        default: Availability zones to deploy MSK and Lenses
+        default: Availability zones
       LensesCloudWatchMetrics:
         default: Lenses CloudWatch metrics
       LensesConnectURLs:
@@ -58,21 +58,21 @@ Metadata:
       LensesStorage:
         default: Lenses storage preference
       LensesWebIngressCIDR:
-        default: The IP address range that can be used to accees the Lenses EC2 instances over Web
+        default: Inbound traffic CIDR address range
       MSKApacheKafkaVersion:
-        default: MSK Apache Kafka version
+        default: Amazon MSK Apache Kafka version
       MSKBrokerType:
-        default: MSK broker type
+        default: Amazon MSK broker type
       MSKEBSStorageVolumeSize:
-        default: MSK EBS storage volume size
+        default: Amazon MSK EBS storage volume size
       MSKEncryptionInTransit:
-        default: MSK encryption in transit
+        default: Amazon MSK encryption in transit
       MSKEncryptionWithinCluster:
-        default: MSK encryption within wluster
+        default: Amazon MSK encryption within cluster
       MSKEnhancedMonitoring:
-        default: MSK enhanced monitoring
+        default: Amazon MSK enhanced monitoring
       MSKNumberOfBrokerNodes:
-        default: Number of MSK broker nodes
+        default: Number of Amazon MSK broker nodes
       PrivateSubnet1CIDR:
         default: Private subnet 1 CIDR
       PrivateSubnet2CIDR:
@@ -82,7 +82,7 @@ Metadata:
       QSS3BucketName:
         default: Quick Start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 bucket region
+        default: Quick Start S3 bucket Region
       QSS3KeyPrefix:
         default: Quick Start S3 key prefix
       VPCCIDR:
@@ -90,18 +90,18 @@ Metadata:
 Parameters:
   AvailabilityZones:
     Type: "List<AWS::EC2::AvailabilityZone::Name>"
-    Description: "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and only 2 AZs are used for this deployment."
+    Description: List of Availability Zones to use for the subnets in the VPC.
   LensesCloudWatchMetrics:
     Type: String
     Default: "No"
     AllowedValues:
       - "Yes"
       - "No"
-    Description: Send all consumer metrics of lenses_endpoint/metrics to cloudwatch
+    Description: Select *Yes* to forward Lenses metrics to CloudWatch.
   LensesConnectURLs:
     Type: String
     Default: ""
-    Description: "Connect Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect"
+    Description: Connect nodes. For more information, see https://docs.lenses.io/install_setup/configuration/lenses-config.html#kafka-connect[Configuration^].
   LensesInstanceType:
     Type: String
     Default: t2.large
@@ -137,22 +137,22 @@ Parameters:
       - r4.4xlarge
       - r4.8xlarge
       - r4.16xlarge
-    Description: Lenses EC2 instance type
+    Description: Lenses EC2 instance type. For more information, see https://aws.amazon.com/ec2/instance-types/[Amazon EC2 Instance Types^].
   LensesSchemaRegistryURLs:
     Type: String
     Default: ""
-    Description: "Schema Registry Nodes. Check documentation https://docs.lenses.io/install_setup/configuration/lenses-config.html#schema-registry"
+    Description: URLs for Schema Registry instances that can be used to register or look up schemas. For more information, see https://docs.lenses.io/4.1/configuration/schema-registry/[Schema Registry^].
   LensesStorage:
     Type: String
     Default: local
     AllowedValues:
       - local
-    Description: Storage Mode
+    Description: Storage mode.
   LensesWebIngressCIDR:
     Type: String
     AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
-    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
-    Description: set ingress CIDR to x.x.x.x/32  to allow one specific IP address, 0.0.0.0/0 to  allow all IP addresses access, or another CIDR range.
+    ConstraintDescription: Entry must be a valid IP range in CIDR format `x.x.x.x/x`.
+    Description: Enter the inbound IP address range in CIDR format `x.x.x.x/x`. To allow one specific IP address, set to `x.x.x.x/32`. To allow all IP addresses, enter `0.0.0.0/0`.
     MaxLength: "18"
     MinLength: "9"
   MSKApacheKafkaVersion:
@@ -168,7 +168,7 @@ Parameters:
       - "2.6.2"
       - "2.7.0"
       - "2.8.0"
-    Description: The Apache Kafka version that on the brokers.
+    Description: Apache Kafka version on the broker nodes.
   MSKBrokerType:
     Type: String
     Default: kafka.m5.large
@@ -182,11 +182,11 @@ Parameters:
       - kafka.m5.12xlarge
       - kafka.m5.16xlarge
       - kafka.m5.24xlarge
-    Description: The type of a broker determines its compute, memory, and storage capabilities. For information to help you pick a type, see Amazon MSK sizing and pricing
+    Description: Select a Amazon MSK broker type. For more information, see https://aws.amazon.com/msk/pricing/[Amazon MSK pricing].
   MSKEBSStorageVolumeSize:
     Type: Number
     Default: 100
-    Description: "EBS storage volume per broker in GiB. You can't decrease the storage after the cluster is created."
+    Description: EBS storage volume per broker, in GiB. After you create the cluster, you can not decrease the storage volume.
     MaxValue: 16384
     MinValue: 1
   MSKEncryptionInTransit:
@@ -216,41 +216,64 @@ Parameters:
     Default: "10.0.0.0/19"
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Description: CIDR block for private subnet 1 located in Availability Zone 1.
+    Description: CIDR block for private subnet 1, located in Availability Zone 1.
   PrivateSubnet2CIDR:
     Type: String
     Default: "10.0.32.0/19"
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Description: CIDR block for private subnet 2 located in Availability Zone 2.
+    Description: CIDR block for private subnet 2, located in Availability Zone 2.
   PublicSubnet1CIDR:
     Type: String
     Default: "10.0.128.0/20"
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Description: CIDR Block for the public DMZ subnet 1 located in Availability Zone 1
+    Description: CIDR Block for the public DMZ subnet 1, located in Availability Zone 1
   QSS3BucketName:
-    Type: String
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      hyphen (-).
     Default: aws-quickstart
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
-    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Description:
+      Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
   QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is 
+    hosted. Keep the default Region unless you are customizing the template. 
+    Changing this Region updates code references to point to a new Quick Start location. 
+    When using your own bucket, specify the Region. 
+    See https://aws-quickstart.github.io/option1.html.'
     Type: String
-    Default: us-east-1
-    Description: The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
   QSS3KeyPrefix:
-    Type: String
+    AllowedPattern: '^[0-9a-zA-Z-/]*$'
+    ConstraintDescription:
+      The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/). The prefix should
+      end with a forward slash (/).
     Default: quickstart-lenses/
-    AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
-    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
+    Description:
+      S3 key prefix that is used to simulate a directory for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). End with 
+      a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html.
+    Type: String
   VPCCIDR:
     Type: String
     Default: "10.0.0.0/16"
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Description: CIDR Block for the VPC
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28.
+    Description: CIDR Block for the VPC.
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
@@ -328,3 +351,7 @@ Outputs:
   FQDN:
     Description: FQDN for EC2 instance
     Value: !GetAtt 'LensesStack.Outputs.FQDN'
+  Postdeployment:
+    Description: See the deployment guide for post-deployment steps.
+    Value: https://aws.amazon.com/quickstart/?quickstart-all.sort-by=item.additionalFields.sortDate&quickstart-all.sort-order=desc&awsm.page-quickstart-all=5
+
