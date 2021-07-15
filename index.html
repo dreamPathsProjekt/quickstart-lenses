@@ -925,7 +925,7 @@ Amazon may share user-deployment information with the AWS Partner that collabora
 <h2 id="_lenses_on_amazon_ec2_for_amazon_msk_on_aws">Lenses on Amazon EC2 for Amazon MSK on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Amazon Managed Streaming Service for Apache Kafka (Amazon MSK) manages your Apache Kafka infrastructure so you can pivot from administration to building streaming applications. Lenses adds a DataOps layer to Kafka with features for developer self-service, data observability, and monitoring. This Quick Start combines the security and infrastructure management of Amazon MSK with the full-service visibility of a Lenses web interface.</p>
+<p>Amazon Managed Streaming for Apache Kafka (Amazon MSK) manages your Apache Kafka infrastructure so you can pivot from administration to building streaming applications. Lenses adds a DataOps layer to Kafka with features for developer self-service, data observability, and monitoring. This Quick Start combines the security and infrastructure management of Amazon MSK with the full-service visibility of a Lenses web interface.</p>
 </div>
 <div class="paragraph">
 <p>Lenses launches in a security group on an Amazon Elastic Compute Cloud (Amazon EC2) instance. Developers access the Lenses dashboard to view and control data and applications running in the Amazon MSK Kafka infrastructure. In Lenses, they can set up cluster monitoring to receive alerts in Amazon CloudWatch when incidents occur such as offline or under-replicated partitions. Lenses offers broad access to partitions, topics, and data flows, and the ability to query data with Structured Query Language (SQL).</p>
@@ -988,13 +988,21 @@ After you deploy the Quick Start, create <a href="https://docs.aws.amazon.com/aw
 <div class="ulist">
 <ul>
 <li>
-<p>Lenses deployed on an Amazon Elastic Compute Container (Amazon EC2) instance.</p>
+<p>A virtual private cloud (VPC) configured with a public subnet, according to AWS best practices, to provide you with your own virtual network on AWS.
+In the public subnet:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Lenses deployed on an Amazon EC2 instance.</p>
 </li>
 <li>
 <p>A security group to control access to the Lenses EC2 instance.</p>
 </li>
+</ul>
+</div>
+</li>
 <li>
-<p>Amazon MSK to provision and manage a Kafka cluster.</p>
+<p>Amazon MSK to provision and manage an Apache Kafka cluster.</p>
 </li>
 <li>
 <p>If the local storage option is chosen during deployment, an Amazon Elastic Block Store (Amazon EBS) volume is provisioned for storage.</p>
@@ -1888,7 +1896,7 @@ and to share your customizations with others.</p>
 </html>
 <!--
 repo commit:
-782a77177c642455e14952058658213a1a964c8b
+353107e88fab51ee21d58431b160eedf6ad6d619
 
 submodule config:
 +81ea0b675a571b662377f9de556a26cce8dad05f docs/boilerplate (heads/main)
