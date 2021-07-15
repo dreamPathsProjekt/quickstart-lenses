@@ -10,8 +10,10 @@ image::../images/lenses-architecture.png[Architecture1,width=100%,height=100%]
 
 As shown in <<architecture1>>, this Quick Start sets up the following:
 
-* Lenses deployed on an Amazon Elastic Compute Container (Amazon EC2) instance.
-* A security group to control access to the Lenses EC2 instance.
-* Amazon MSK to provision and manage a Kafka cluster.
+* A virtual private cloud (VPC) configured with a public subnet, according to AWS best practices, to provide you with your own virtual network on AWS.
+In the public subnet:
+** Lenses deployed on an Amazon EC2 instance.
+** A security group to control access to the Lenses EC2 instance.
+* Amazon MSK to provision and manage an Apache Kafka cluster.
 * If the local storage option is chosen during deployment, an Amazon Elastic Block Store (Amazon EBS) volume is provisioned for storage.
 * (Optional) If Amazon CloudWatch metrics is chosen during deployment, an Amazon CloudWatch log group is launched to collect and retain metrics on the Lenses EC2 instance.
