@@ -27,7 +27,7 @@ Metadata:
           - MSKClusterARN
           - MSKSecurityGroup
       - Label:
-          default: Amazon MSK SASL/ SCRAM (optional)
+          default: Amazon MSK SASL/SCRAM (optional)
         Parameters:
           - MSKSecretName
           - MSKSecretDecryptionKMSKey
@@ -228,17 +228,17 @@ Resources:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupName: LensesEc2SecurityGroup
-      GroupDescription: Enable HTTP access For Lenses
+      GroupDescription: Enable HTTP access for Lenses
       SecurityGroupEgress:
         - CidrIp: "0.0.0.0/0"
           IpProtocol: "-1"
       SecurityGroupIngress:
-        - Description: Access Lenses on the Web
+        - Description: Access Lenses on the internet.
           CidrIp: !Ref LensesLocation
           FromPort: 9991
           IpProtocol: tcp
           ToPort: 9991
-        - Description: Allow traffic for MSK
+        - Description: Allow traffic for Amazon MSK.
           IpProtocol: "-1"
           SourceSecurityGroupId: !Ref MSKSecurityGroup
       Tags:
@@ -648,7 +648,7 @@ Resources:
                 fi                
 Outputs:
   FQDN:
-    Description: FQDN for EC2 instance
+    Description: FQDN for the Lenses EC2 instance.
     Value: !Join
       - ":"
       - - "Fn::GetAtt":
