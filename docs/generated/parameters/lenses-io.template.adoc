@@ -25,7 +25,7 @@
 (`MSKClusterARN`)|`**__Requires input__**`|MSK cluster Amazon Resource Name (ARN).|Cluster security group
 (`MSKSecurityGroup`)|`**__Requires input__**`|MSK cluster security group ID.
 |===
-.Amazon MSK SASL/ SCRAM (optional)
+.Amazon MSK SASL/SCRAM (optional)
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|MSK associated MSKSecretNameSecret
