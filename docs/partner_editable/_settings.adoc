@@ -1,4 +1,4 @@
-:quickstart-project-name: quickstart-lensesio
+:quickstart-project-name: quickstart-lenses
 :partner-product-name: Lenses on Amazon EC2 for Amazon MSK
 :partner-company-name: Lenses
 :partner-product-short-name: Lenses
