@@ -58,7 +58,7 @@ Metadata:
       MSKClusterARN:
         default: Cluster ARN
       MSKSecretDecryptionKMSKey:
-        defaukt: KMS SymmetricKey name
+        default: KMS SymmetricKey name
       MSKSecretName:
         default: MSK associated MSKSecretNameSecret
       MSKSecurityGroup:
@@ -207,6 +207,19 @@ Mappings:
       linux: ami-077d4256e6236e625
     sa-east-1:
       linux: ami-09a710b2cc3a5bed2
+Conditions:
+  CreateLensesMSKAuthSecretAccessPolicy: !And
+    - !Not
+      - !Equals
+        - Ref: MSKSecretName
+        - ""
+    - !Not
+      - !Equals
+        - Ref: MSKSecretDecryptionKMSKey
+        - ""
+  CreateLensesCloudwatchMetricDataPolicy: !Equals
+      - Ref: CloudWatchMetrics
+      - "Yes"
 Resources:
   CloudWatchLogGroup:
     Type: "AWS::Logs::LogGroup"
@@ -251,6 +264,51 @@ Resources:
       GroupId: !Ref MSKSecurityGroup
       IpProtocol: "-1"
       SourceSecurityGroupId: !GetAtt LensesSecurityGroup.GroupId
+  CloudwatchMetricDataPolicy:
+    Type: AWS::IAM::Policy
+    Condition: CreateLensesCloudwatchMetricDataPolicy
+    Properties:
+      PolicyName: LensesCloudwatchMetricDataPolicy
+      Roles:
+        - Ref: EC2Role
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action:
+            - 'cloudwatch:PutMetricData'
+          Resource: '*'
+  MSKAuthSecretAccessPolicy:
+    Type: AWS::IAM::Policy
+    Condition: CreateLensesMSKAuthSecretAccessPolicy
+    Properties:
+      PolicyName: LensesMSKAuthSecretAccessPolicy
+      Roles:
+        - Ref: EC2Role
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - "secretsmanager:GetSecretValue"
+              - "secretsmanager:DescribeSecret"
+              - "kms:Decrypt"
+            Resource:
+              - "Fn::Join":
+                  - ""
+                  - - "arn:aws:secretsmanager:"
+                    - Ref: "AWS::Region"
+                    - ":"
+                    - Ref: "AWS::AccountId"
+                    - ":secret:"
+                    - Ref: MSKSecretName
+                    - "*"
+              - "Fn::Join":
+                  - ""
+                  - - "arn:aws:kms:"
+                    - Ref: "AWS::Region"
+                    - ":"
+                    - Ref: "AWS::AccountId"
+                    - ":key/"
+                    - Ref: MSKSecretDecryptionKMSKey
   EC2Role:
     Type: "AWS::IAM::Role"
     Properties:
@@ -305,39 +363,6 @@ Resources:
                         - Ref: CloudWatchLogGroup
                         - ":log-stream:"
                         - "*"
-        - PolicyName: LensesMSKAuthSecretAccessPolicy
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "secretsmanager:GetSecretValue"
-                  - "secretsmanager:DescribeSecret"
-                  - "kms:Decrypt"
-                Resource:
-                  - "Fn::Join":
-                      - ""
-                      - - "arn:aws:secretsmanager:"
-                        - Ref: "AWS::Region"
-                        - ":"
-                        - Ref: "AWS::AccountId"
-                        - ":secret:"
-                        - Ref: MSKSecretName
-                        - "*"
-                  - "Fn::Join":
-                      - ""
-                      - - "arn:aws:kms:"
-                        - Ref: "AWS::Region"
-                        - ":"
-                        - Ref: "AWS::AccountId"
-                        - ":key/"
-                        - Ref: MSKSecretDecryptionKMSKey
-        - PolicyName: LensesCloudwatchMetricDataPolicy
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "cloudwatch:PutMetricData"
-                Resource: "*"
       RoleName: !Join
         - "-"
         - - quickstart-lenses-ec2
