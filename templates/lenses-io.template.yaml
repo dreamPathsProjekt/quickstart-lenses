@@ -424,9 +424,9 @@ Resources:
           - - "Fn::Sub": |
                 #!/bin/bash
                 set -o errexit
-                
+
                 cd /opt
-                
+
                 MSK_CLUSTER_ARN="${MSKClusterARN}"
                 MSK_SECRET_NAME="${MSKSecretName}"
                 AWS_REGION="${AWS::Region}"
@@ -443,33 +443,33 @@ Resources:
                 CONN_PROTOCOL="PLAINTEXT"
                 JSON_CLUSTER_TRANSIT=".BootstrapBrokerString"
                 KEY_ALIAS="lenses-io"
-                
+
                 # Create base Lenses Configuration
                 cat << EOF > /opt/lenses/lenses.conf
                 lenses.port=9991
-                
+
                 lenses.secret.file=security.conf
                 lenses.sql.state.dir="/mnt/persistent/kafka-streams-state"
                 lenses.storage.directory="/mnt/persistent/storage"
                 lenses.license.file=license.json
                 EOF
-                
-                
+
+
                 # Create Lenses License
                 cat << EOF > /opt/lenses/license.json
                 EOF
-                
+
             - |
-                
+
                 EC2_INSTANCE_ID="`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`"
                 ADMIN_PASS=$EC2_INSTANCE_ID
-                
+
                 # Create Lenses Security configuration
                 cat << EOF > /opt/lenses/security.conf
                 lenses.security.user="admin"
                 lenses.security.password="${ADMIN_PASS}"
                 EOF
-                
+
                 if [ "${LENSES_STORAGE_TYPE}" == "postgres" ]; then
                 cat << EOF >> /opt/lenses/lenses.conf
                 lenses.storage.postgres.database: "${LENSES_STORAGE_POSTGRES_DATABASE}"
@@ -481,7 +481,7 @@ Resources:
                 lenses.storage.postgres.password: "${LENSES_STORAGE_POSTGRES_PASSWORD}"
                 EOF
                 fi
-                
+
                 if [ ! -z "$MSK_CLUSTER_ARN" ]; then
                 CLUSTER_PROTOCOL=$(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq -r '.ClusterInfo.EncryptionInfo.EncryptionInTransit.ClientBroker')
                 echo "[INFO] MSK Brokers Transit: $CLUSTER_PROTOCOL"
@@ -489,17 +489,17 @@ Resources:
                 PLAINTEXT)
                     ;;
                 TLS | TLS_PLAINTEXT)
-                    # TLS support 
+                    # TLS support
                     JSON_CLUSTER_TRANSIT=".BootstrapBrokerStringTls"
                     CONN_PROTOCOL="SSL"
-                    
+
                     mkdir -p /var/private/ssl
                     cp /usr/lib/jvm/java-1.8.0/jre/lib/security/cacerts /var/private/ssl/client.truststore.jks
-                
+
                     SASL_SCRAM_ENABLED="$(aws kafka describe-cluster \
                             --cluster-arn "${MSK_CLUSTER_ARN}" \
                             --region "${AWS_REGION}"  | jq -r '.ClusterInfo.ClientAuthentication.Sasl.Scram.Enabled')"
-                
+
                     if [[ "${SASL_SCRAM_ENABLED}" == "true" ]]; then
                     sasl_scram_secret="$(aws secretsmanager  get-secret-value --secret-id "${MSK_SECRET_NAME}" --region "${AWS_REGION}" | jq -r '.SecretString')"
                     sasl_cram_username="$(echo "${sasl_scram_secret}" | jq -r '.username')"
@@ -512,17 +512,17 @@ Resources:
                 };
                 CMD
                     chmod 0600 /etc/users_jaas.conf
-                
+
                     sed -i 's/PermissionsStartOnly\=true/PermissionsStartOnly\=true\nEnvironment\=LENSES_OPTS\="\-Djava\.security\.auth\.login\.config=\/etc\/users\_jaas\.conf"/' /etc/systemd/system/lenses-io.service
                     export CONN_PROTOCOL="SASL_SSL"
                     export JSON_CLUSTER_TRANSIT=".BootstrapBrokerStringSaslScram"
-                
-                    
+
+
                     echo 'lenses.kafka.settings.client.sasl.mechanism=SCRAM-SHA-512' >> /opt/lenses/lenses.conf
                     fi
                     echo "lenses.kafka.settings.client.security.protocol=${CONN_PROTOCOL}" >> /opt/lenses/lenses.conf
                     echo 'lenses.kafka.settings.client.ssl.truststore.location=/var/private/ssl/client.truststore.jks' >> /opt/lenses/lenses.conf
-                
+
                     CLUSTER_PRIVATE_CA_ARN=$(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq -r '.ClusterInfo.ClientAuthentication.Tls.CertificateAuthorityArnList | .[0]')
                     # TLS support with Authentication
                     if [ "$CLUSTER_PRIVATE_CA_ARN" != "null" ]; then
@@ -532,13 +532,13 @@ Resources:
                             -dname "CN=$KEY_ALIAS" \
                             -alias $KEY_ALIAS \
                             -storetype pkcs12
-                
+
                         keytool -keystore /var/private/ssl/client.keystore.jks  \
                             -certreq -file client-cert-sign-request \
                             -alias $KEY_ALIAS \
                             -storepass $ADMIN_PASS \
                             -keypass $ADMIN_PASS
-                        
+
                         # Remove NEW word (AWS recommendation) in order to issue-certificate
                         sed -i 's/NEW //g' client-cert-sign-request
                         # Create a certificate request
@@ -547,10 +547,10 @@ Resources:
                         sleep 20
                         # Get certification for the new Certificate Request
                         /usr/local/bin/aws acm-pca get-certificate --region $AWS_REGION --certificate-authority-arn $CLUSTER_PRIVATE_CA_ARN --certificate-arn $CERTIFICATE_REQUEST_ARN >> result.json
-                
+
                         CERTIFICATE=$(cat result.json | jq -r '.Certificate')
                         CERTIFICATE_CHAIN=$(cat result.json | jq -r '.CertificateChain')
-                
+
                         # Create Signed certificate from ACM
                         cat << EOF > /var/private/ssl/signed-certificate-from-acm
                 $CERTIFICATE
@@ -561,32 +561,32 @@ Resources:
                             -alias $KEY_ALIAS \
                             -storepass $ADMIN_PASS \
                             -keypass $ADMIN_PASS
-                
+
                         # Create the keystore configuration
                         echo lenses.kafka.settings.client.ssl.keystore.location="/var/private/ssl/client.keystore.jks" >> /opt/lenses/lenses.conf
                         echo lenses.kafka.settings.client.ssl.keystore.password="\"$ADMIN_PASS"\" >> /opt/lenses/lenses.conf
                         echo lenses.kafka.settings.client.ssl.key.password="\"$ADMIN_PASS"\" >> /opt/lenses/lenses.conf
                         # append empty line
                         echo "" >> /opt/lenses/lenses.conf
-                
+
                         # Cleanup
                         rm result.json
                     fi
                     ;;
-                
+
                 *)
-                    echo "[ERROR] Uknown MSK Protocol"         
+                    echo "[ERROR] Uknown MSK Protocol"
                     exit 1
                     ;;
                     esac
-                
+
                     # Create the connection string for the brokers
                     BOOTSTRAP_BROKERS=($(/usr/local/bin/aws kafka get-bootstrap-brokers --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq  -r "$JSON_CLUSTER_TRANSIT" | tr "," "\n"))
                     for BROKER in "${BOOTSTRAP_BROKERS[@]}"
                     do
                         BROKERS="${BROKERS:+$BROKERS,}$CONN_PROTOCOL://$BROKER"
                     done
-                
+
                     # Create the connection string for the zookeepers
                     ZOOKEEPER_CONN=($(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq  -r '.ClusterInfo.ZookeeperConnectString' | tr "," "\n"))
                     echo $ZOOKEEPER_CONN
@@ -594,30 +594,30 @@ Resources:
                         ZOOKEEPERS="${ZOOKEEPERS:+$ZOOKEEPERS, }{url:\"$ZK\"}"
                     done
                     ZOOKEEPERS="[$ZOOKEEPERS]"
-                
+
                     IS_OPEN_MONITORING_ENABLED=$(/usr/local/bin/aws kafka describe-cluster --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq -r '.ClusterInfo.OpenMonitoring.Prometheus.JmxExporter.EnabledInBroker')
                 fi
-                
+
                 if [ -z "$BROKERS" ]; then
-                    echo "[ERROR] Unable to configure Kafka Brokers."         
+                    echo "[ERROR] Unable to configure Kafka Brokers."
                     exit 1
                 fi
-                
+
                 # Append Lenses configuration
                 echo lenses.kafka.brokers="\"$BROKERS"\" >> /opt/lenses/lenses.conf
-                
+
                 if [ ! -z "$ZOOKEEPERS" ]; then
                     echo lenses.zookeeper.hosts="$ZOOKEEPERS" >> /opt/lenses/lenses.conf
                 fi
-                
+
                 if [ ! -z "$SCHEMA_REGISTRY_URLS" ]; then
                     echo lenses.schema.registry.urls="$SCHEMA_REGISTRY_URLS" >> /opt/lenses/lenses.conf
                 fi
-                
+
                 if [ ! -z "$CONNECT_URLS" ]; then
                     echo lenses.kafka.connect.clusters="$CONNECT_URLS" >> /opt/lenses/lenses.conf
                 fi
-                
+
                 if $IS_OPEN_MONITORING_ENABLED; then
                   MSK_NODES=($(/usr/local/bin/aws kafka list-nodes --cluster-arn $MSK_CLUSTER_ARN --region $AWS_REGION | jq  -r ".NodeInfoList[]  | @base64"))
                   for NODE in "${MSK_NODES[@]}"
@@ -629,11 +629,11 @@ Resources:
                   # Append to Lenses conf
                   echo lenses.kafka.metrics={type: "AWS", port: [$KAFKA_METRICS_PORT]} >> /opt/lenses/lenses.conf
                 fi
-                
+
                 # Start Lenses Service
                 systemctl restart lenses-io
                 systemctl enable lenses-io.service
-                
+
                 # Create configuration for AWS Cloudwatch Logging
                 mkdir -p /etc/awslogs
                 cat << EOF > /etc/awslogs/awscli.conf
@@ -642,7 +642,7 @@ Resources:
                 [default]
                 region = $AWS_REGION
                 EOF
-                
+
                 cat /dev/null > /etc/awslogs/awslogs.conf
                 cat << EOF > /etc/awslogs/awslogs.conf
                 [general]
@@ -651,26 +651,26 @@ Resources:
                 file = /opt/lenses/logs/lenses.log
                 log_group_name = $CLOUDWATCH_LOG_GROUP
                 log_stream_name = $EC2_INSTANCE_ID/lenses.log
-                
+
                 [/opt/lenses/logs/lenses-warn]
                 file = /opt/lenses/logs/lenses-warn.log
                 log_group_name = $CLOUDWATCH_LOG_GROUP
                 log_stream_name = $EC2_INSTANCE_ID/lenses-warn.log
-                
+
                 [/opt/lenses/logs/lenses-metrics]
                 file = /opt/lenses/logs/metrics.log
                 log_group_name = $CLOUDWATCH_LOG_GROUP
                 log_stream_name = $EC2_INSTANCE_ID/lenses-metrics.log
                 EOF
-                
+
                 systemctl restart awslogsd
                 systemctl enable awslogsd.service
-                
+
                 echo "AWS_DEFAULT_REGION=${AWS_REGION}" >> /etc/environment
-                
+
                 if [ "${CloudWatchCustomMetrics}" == "Yes" ] && [ -e /opt/awscloudwatch.py ]; then
                   systemctl enable --now cloudwatch_metrics.service
-                fi                
+                fi
 Outputs:
   FQDN:
     Description: FQDN for the Lenses EC2 instance.
